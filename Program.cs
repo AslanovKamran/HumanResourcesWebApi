@@ -1,10 +1,7 @@
-
-using HumanResourcesWebApi.Abstract;
 using HumanResourcesWebApi.Repository.Dapper;
-
+using HumanResourcesWebApi.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 
 builder.Services.AddControllers();

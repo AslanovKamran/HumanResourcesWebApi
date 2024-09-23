@@ -1,8 +1,10 @@
-﻿using HumanResourcesWebApi.Abstract;
-using Microsoft.Data.SqlClient;
-using Dapper;
+﻿using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
+using HumanResourcesWebApi.Abstract;
+using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -11,6 +13,35 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
     private readonly string _connectionString;
 
     public OrganizationStructuresRepository(string connectionString) => _connectionString = connectionString;
+
+    public async Task<AddOrganizationStructureRequest> AddOrganizationStructureAsync(AddOrganizationStructureRequest request)
+    {
+
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Code", request.Code, DbType.String, ParameterDirection.Input);
+            parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);
+            parameters.Add("BeginningHistory", request.BeginningHistory, DbType.Date, ParameterDirection.Input);
+            parameters.Add("FirstNumber", request.FirstNumber, DbType.String, ParameterDirection.Input);
+            parameters.Add("SecondNumber", request.SecondNumber, DbType.String, ParameterDirection.Input);
+            parameters.Add("ParentId", request.ParentId, DbType.Int32, ParameterDirection.Input);
+
+            // Make sure the procedure name matches your actual stored procedure
+            string query = @"exec AddOrganizationStructure 
+                         @Code, 
+                         @Name, 
+                         @BeginningHistory, 
+                         @FirstNumber, 
+                         @SecondNumber, 
+                         @ParentId";
+
+            // Use Dapper to execute the stored procedure and return the inserted entity
+            var insertedOrganization = await db.QuerySingleOrDefaultAsync<AddOrganizationStructureRequest>(query, parameters);
+
+            return insertedOrganization ?? throw new InvalidOperationException("Failed to insert organization structure.");
+        }
+    }
 
     public async Task<OrganizationStructure> GetOrganizationStructureByIdAsync(int id)
     {
