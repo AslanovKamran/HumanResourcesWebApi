@@ -10,8 +10,9 @@ namespace HumanResourcesWebApi.Controllers
     public class OrganizationStructuresController : ControllerBase
     {
         private readonly IOrganizationStructuresRepository _repos;
-        private readonly ILogger<OrganizationStructuresController> _logger; // Add this
-        public OrganizationStructuresController(IOrganizationStructuresRepository repos, ILogger<OrganizationStructuresController> logger)
+        private readonly ILogger<OrganizationStructuresController> _logger; 
+        public OrganizationStructuresController(IOrganizationStructuresRepository repos, 
+            ILogger<OrganizationStructuresController> logger)
         {
             _repos = repos;
             _logger = logger;
@@ -33,7 +34,7 @@ namespace HumanResourcesWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrganization([FromForm] AddOrganizationStructureRequest request)
+        public async Task<IActionResult> AddOrganizationStructure([FromForm] AddOrganizationStructureRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -50,6 +51,30 @@ namespace HumanResourcesWebApi.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrganizationStructure([FromForm] UpdateOrganizationStructureRequest request) 
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var updated = await _repos.UpdateOrganizationStrcuture(request);
+                return Ok(updated);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError(ex, "SQL error occurred while updating organization.");
+                return Conflict($"SQL Exception:\n Error Code: {ex.ErrorCode}\nError Message: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Internal server error occured.");
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }

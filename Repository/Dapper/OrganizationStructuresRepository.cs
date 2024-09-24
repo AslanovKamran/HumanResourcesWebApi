@@ -50,7 +50,7 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
 
-            string query = @"exec GetOrganizationStructureById @Id";
+            string query = @"Select * FROM OrganizationStructures WHERE Id = @Id";
             var orgstruct = await db.QueryFirstOrDefaultAsync<OrganizationStructure>(query, parameters);
             return orgstruct!;
         }
@@ -78,6 +78,47 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             return hierarchy;
         }
     }
+    public async Task<UpdateOrganizationStructureRequest> UpdateOrganizationStrcuture(UpdateOrganizationStructureRequest request)
+    {
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("Code", request.Code, DbType.String, ParameterDirection.Input);
+            parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);
+            parameters.Add("BeginningHistory", request.BeginningHistory, DbType.Date, ParameterDirection.Input);
+            parameters.Add("FirstNumber", request.FirstNumber, DbType.String, ParameterDirection.Input);
+            parameters.Add("SecondNumber", request.SecondNumber, DbType.String, ParameterDirection.Input);
+            parameters.Add("TabelOrganizationId", request.TabelOrganizationId, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("TabelPriority", request.TabelPriority, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("Canceled", request.Canceled, DbType.Boolean, ParameterDirection.Input);
+            parameters.Add("HeadName", request.HeadName, DbType.String, ParameterDirection.Input);
+            parameters.Add("HeadPosition", request.HeadPosition, DbType.String, ParameterDirection.Input);
+            parameters.Add("IsSeaCoef", request.IsSeaCoef, DbType.Boolean, ParameterDirection.Input);
+
+            // Make sure the procedure name matches your actual stored procedure
+            string query = @"exec 
+                                UpdateOrganizationStructure 
+                                @Id,
+                                @Code,
+                                @Name,
+                                @BeginningHistory,
+                                @FirstNumber,
+                                @SecondNumber,
+                                @TabelOrganizationId,
+                                @TabelPriority,
+                                @Canceled,
+                                @HeadName,
+                                @HeadPosition,
+                                @IsSeaCoef";
+
+            // Use Dapper to execute the stored procedure and return the inserted entity
+            var updatedOrganization = await db.QuerySingleOrDefaultAsync<UpdateOrganizationStructureRequest>(query, parameters);
+
+            return updatedOrganization ?? throw new InvalidOperationException("Failed to update organization structure.");
+        }
+    }
+
 
 
     // Helper method to build hierarchy for DTOs
