@@ -1,10 +1,9 @@
-﻿using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Domain;
+﻿using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Common.Mapper;
 using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Repository.Dapper;
-using Microsoft.AspNetCore.Http;
+using HumanResourcesWebApi.Abstract;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HumanResourcesWebApi.Controllers;
 
@@ -17,41 +16,105 @@ public class StateTablesController : ControllerBase
     public StateTablesController(IStateTablesRepository repos) => _repos = repos;
 
     [HttpGet]
-    public async Task<IActionResult> GetStateTables(int itemsPerPage = 10, int currentPage = 1, bool showOnlyActive = true)
+    public async Task<IActionResult> GetStateTables(int itemsPerPage = 30, int currentPage = 1, bool showOnlyActive = true)
     {
-        var (stateTables, pageInfo) = await _repos.GetStateTablesAsync(itemsPerPage, currentPage, showOnlyActive);
-        var result = new List<StateTableInfoDTO>();
-        foreach (var stateTable in stateTables) 
+        try
         {
-            result.Add(MapDto(stateTable));
+            var (stateTables, pageInfo) = await _repos.GetStateTablesAsync(itemsPerPage, currentPage, showOnlyActive);
+            var result = new List<StateTableInfoDTO>();
+            foreach (var stateTable in stateTables)
+            {
+                result.Add(StateTable_StateTableDtoMapper.MapDto(stateTable));
+            }
+            return Ok(new { StateTables = result, PageInfo = pageInfo });
         }
-        return Ok(new { StateTables = result, PageInfo = pageInfo });
+
+        catch (SqlException ex)
+        {
+            return Conflict($"SQL Exception:\n Error Code: {ex.ErrorCode}\nError Message: {ex.Message}");
+        }
+
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+        }
+
     }
 
-
-    private static StateTableInfoDTO MapDto(StateTable obj) 
+    [HttpGet("{organizationId}")]
+    public async Task<IActionResult> GetStateTablesByOrganization(int organizationId, [FromQuery] bool showOnlyActive = true)
     {
-        var result = new StateTableInfoDTO();
+        try
+        {
+            var stateTables = await _repos.GetByOrganizationAsync(organizationId, showOnlyActive);
+            var result = new List<StateTableInfoDTO>();
+            foreach (var stateTable in stateTables)
+            {
+                result.Add(StateTable_StateTableDtoMapper.MapDto(stateTable));
+            }
+            return Ok(result);
 
-        result.Id = obj.Id;
-        result.OrganizatinStructureFullName = obj.OrganizationStructure.FullName;
-        result.Name = obj.Name;
-        result.Degree = obj.Degree;
-        result.UnitCount = obj.UnitCount;
-        result.MonthlySalaryFrom = obj.MonthlySalaryFrom;
-        result.HourlySalary = obj.HourlySalary;
-        result.MonthlySalaryExtra = obj.MonthlySalaryExtra;
-        result.OccupiedPostCount = obj.OccupiedPostCount;
-        result.DocumentNumber = obj.DocumentNumber;
-        result.DocumentDate = obj.DocumentDate;
-        result.StateWorkType = obj.StateWorkType.Type;
-        result.HarmfulnessCoefficient = obj.HarmfulnessCoefficient;
-        result.WorkHours = obj.WorkHours;
-        result.WorkHoursSaturday = obj.WorkHoursSaturday;
-        result.TabelPosition = obj.TabelPosition;
-        result.TabelPriority = obj.TabelPriority;
-        result.IsCanceled = obj.IsCanceled;
+        }
+        catch (SqlException ex)
+        {
+            return Conflict($"SQL Exception:\n Error Code: {ex.ErrorCode}\nError Message: {ex.Message}");
+        }
 
-        return result;
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+        }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddStateTable([FromForm] AddStateTableRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            await _repos.AddStateTableAsync(request);
+            return StatusCode(StatusCodes.Status201Created, "State table added successfully.");
+        }
+        catch (SqlException ex)
+        {
+            return Conflict($"SQL Exception: Error Code: {ex.ErrorCode} Message: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+        }
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateStateTable([FromForm] UpdateStateTableRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            await _repos.UpdateStateTableAsync(request);
+
+            return Ok(new { Message = "State Table updated successfully." });
+        }
+        catch (SqlException ex)
+        {
+            return Conflict(new { Message = $"SQL Exception: {ex.Message}" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { Message = $"Not Found: {ex.Message}" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
+        }
+    }
+
 }
