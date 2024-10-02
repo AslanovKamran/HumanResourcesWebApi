@@ -1,10 +1,10 @@
-﻿using Dapper;
-using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Domain;
+﻿using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Security.AccessControl;
+using Dapper;
+using HumanResourcesWebApi.Models.Requests;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -13,6 +13,7 @@ public class EmployeesRepository : IEmployeesRepository
     private readonly string _connectionString;
 
     public EmployeesRepository(string connectionString) => _connectionString = connectionString;
+
 
     public async Task<(PageInfo PageInfo, List<EmployeesChunk> Employees)> GetEmployeesChunkAsync(int itemsPerPage = 10, int currentPage = 1)
     {
@@ -29,7 +30,6 @@ public class EmployeesRepository : IEmployeesRepository
 
             string query = @"exec GetEmployeesInChunks @Skip, @Take";
 
-            // Execute the stored procedure using Dapper (or ADO.NET if you prefer)
             using (var multi = await db.QueryMultipleAsync(query, parameters))
             {
                 // First result set: Get the total count of employees
@@ -38,11 +38,44 @@ public class EmployeesRepository : IEmployeesRepository
                 // Second result set: Get the actual employee data
                 var employees = multi.Read<EmployeesChunk>().ToList();
 
-                // Create the PageInfo object with the calculated properties
+
                 var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
 
                 return (pageInfo, employees);
             }
         }
     }
+
+
+    public async Task AddEmployeeAsync(AddEmployeeRequest request)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", request.Id, DbType.Int32);
+            parameters.Add("@Surname", request.Surname, DbType.String);
+            parameters.Add("@Name", request.Name, DbType.String);
+            parameters.Add("@FatherName", request.FatherName, DbType.String);
+            parameters.Add("@GenderId", request.GenderId, DbType.Int32);
+            parameters.Add("@MaritalStatusId", request.MaritalStatusId, DbType.Int32);
+            parameters.Add("@EntryDate", request.EntryDate, DbType.Date);
+            parameters.Add("@StateTableId", request.StateTableId, DbType.Int32);
+            parameters.Add("@PhotoUrl", request.PhotoUrl, DbType.String, size: 255);
+
+            var query = @"exec AddEmployee
+                                             @Id, 
+                                             @Surname, 
+                                             @Name, 
+                                             @FatherName, 
+                                             @GenderId, 
+                                             @MaritalStatusId, 
+                                             @EntryDate, 
+                                             @StateTableId, 
+                                             @PhotoUrl";
+                                            
+
+            await connection.ExecuteAsync(query, parameters);
+        }
+    }
+
 }

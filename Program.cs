@@ -3,11 +3,9 @@ using HumanResourcesWebApi.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var connectionString = builder.Configuration.GetConnectionString("Network")!;
 
@@ -17,7 +15,6 @@ builder.Services.AddScoped<IStateTablesRepository, StateTablesRepository>(provid
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
 
 var app = builder.Build();
-
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -35,8 +32,6 @@ app.UseCors(options =>
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-
 
 app.MapControllers();
 
