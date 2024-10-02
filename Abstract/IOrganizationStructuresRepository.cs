@@ -6,8 +6,10 @@ namespace HumanResourcesWebApi.Abstract;
 
 public interface IOrganizationStructuresRepository
 {
-    public Task<List<OrganizationStructureListDTO>> GetOrganizationStructureListAsync(bool includeCanceled = false);
-    public Task<OrganizationStructure> GetOrganizationStructureByIdAsync(int id);
-    public Task<UpdateOrganizationStructureRequest> UpdateOrganizationStrcuture(UpdateOrganizationStructureRequest request);
-    public Task<AddOrganizationStructureRequest> AddOrganizationStructureAsync(AddOrganizationStructureRequest request);
+    Task<List<OrganizationStructureListDTO>> GetOrganizationStructureListAsync(bool includeCanceled = false);
+    Task<OrganizationStructure> GetOrganizationStructureByIdAsync(int id);
+    Task<UpdateOrganizationStructureRequest> UpdateOrganizationStrcuture(UpdateOrganizationStructureRequest request);
+    Task<AddOrganizationStructureRequest> AddOrganizationStructureAsync(AddOrganizationStructureRequest request);
+    Task DeleteOrganizationStructureAsync(int id);
+    
 }

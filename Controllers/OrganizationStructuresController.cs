@@ -79,5 +79,24 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SoftDeleteOrganizationStructure(int id)
+        {
+            try
+            {
+                await _repos.DeleteOrganizationStructureAsync(id);
+                return Ok(new { Message = "Organization structure successfully marked as canceled." });
+            }
+            catch (SqlException ex)
+            {
+                return Conflict(new { Message = $"SQL Exception: {ex.Message}" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+
     }
 }

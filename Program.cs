@@ -8,17 +8,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var connectionString = builder.Configuration.GetConnectionString("Network")!;
 
 builder.Services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
 builder.Services.AddScoped<IStateWorkTypesRepository, StateWorkTypesRepository>(provider => new StateWorkTypesRepository(connectionString));
 builder.Services.AddScoped<IStateTablesRepository, StateTablesRepository>(provider => new StateTablesRepository(connectionString));
+builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
 
 var app = builder.Build();
 
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.DisplayRequestDuration();
+});
 
 app.UseCors(options =>
 {

@@ -43,6 +43,7 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
         }
     }
 
+   
     public async Task<OrganizationStructure> GetOrganizationStructureByIdAsync(int id)
     {
         using (IDbConnection db = new SqlConnection(_connectionString))
@@ -119,6 +120,17 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
         }
     }
 
+    public async Task DeleteOrganizationStructureAsync(int id)
+    {
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var query = "SoftDeleteOrganizationStructure @Id";
+            await db.ExecuteAsync(query, parameters); 
+        }
+    }
 
 
     // Helper method to build hierarchy for DTOs
@@ -137,5 +149,6 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
 
         return result;  // Return a List of DTOs
     }
+
 
 }

@@ -154,15 +154,26 @@ namespace HumanResourcesWebApi.Repository.Dapper
                 parameters.Add("IsCanceled", request.IsCanceled, DbType.Boolean, ParameterDirection.Input);
 
                 string query = @"exec UpdateStateTable
-                             @Id, @Name, @Degree, @UnitCount, @MonthlySalaryFrom, 
-                             @HourlySalary, @MonthlySalaryExtra, @OccupiedPostCount, @DocumentNumber,
-                             @DocumentDate, @WorkTypeId, @OrganizationStructureId, @HarmfulnessCoefficient, 
-                             @WorkHours, @WorkingHoursSpecial, @WorkHoursSaturday, @TabelPriority, 
-                             @TabelPosition, @IsCanceled";
+                                                    @Id, @Name, @Degree, @UnitCount, @MonthlySalaryFrom, 
+                                                    @HourlySalary, @MonthlySalaryExtra, @OccupiedPostCount, @DocumentNumber,
+                                                    @DocumentDate, @WorkTypeId, @OrganizationStructureId, @HarmfulnessCoefficient, 
+                                                    @WorkHours, @WorkingHoursSpecial, @WorkHoursSaturday, @TabelPriority, 
+                                                    @TabelPosition, @IsCanceled";
 
                 await db.ExecuteAsync(query, parameters);
             }
         }
 
+        public async Task DeleteStateTableAsync(int id)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString)) 
+            {
+
+                var parameters = new DynamicParameters();
+                parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+                var query = @"exec SoftDeleteStateTable @Id";
+                await db.ExecuteAsync(query, parameters); // Execute without expecting a result
+            }
+        }
     }
 }

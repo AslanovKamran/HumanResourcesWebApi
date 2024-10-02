@@ -11,4 +11,5 @@ public interface IStateTablesRepository
     Task <List<StateTable>> GetByOrganizationAsync(int organizationId, bool showOnlyActive = true);
     Task AddStateTableAsync(AddStateTableRequest request);
     Task UpdateStateTableAsync(UpdateStateTableRequest request);
+    Task DeleteStateTableAsync(int id);
 }

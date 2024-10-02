@@ -117,4 +117,22 @@ public class StateTablesController : ControllerBase
         }
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteStateTable(int id) 
+    {
+        try
+        {
+            await _repos.DeleteStateTableAsync(id);
+            return Ok(new { Message = "State table successfully marked as canceled." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { Message = $"SQL Exception: {ex.Message}" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
+        }
+    }
 }
