@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
 using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Common.Filters;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -15,7 +16,7 @@ public class EmployeesRepository : IEmployeesRepository
     public EmployeesRepository(string connectionString) => _connectionString = connectionString;
 
 
-    public async Task<(PageInfo PageInfo, List<EmployeesChunk> Employees)> GetEmployeesChunkAsync(int itemsPerPage = 10, int currentPage = 1)
+    public async Task<(PageInfo PageInfo, List<EmployeesChunk> Employees)> GetEmployeesChunkAsync(EmployeeFilter filter, int itemsPerPage = 10, int currentPage = 1)
     {
         int skip = (currentPage - 1) * itemsPerPage;
         int take = itemsPerPage;
@@ -24,21 +25,29 @@ public class EmployeesRepository : IEmployeesRepository
         {
 
             var parameters = new DynamicParameters();
-            parameters.Add("Skip", skip, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("Take", take, DbType.Int32, ParameterDirection.Input);
 
+            parameters.Add("@Skip", skip, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@Take", take, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@Surname", filter.Surname ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
+            parameters.Add("@Name", filter.Name ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
+            parameters.Add("@FatherName", filter.FatherName ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
+            parameters.Add("@BirthDateStart", filter.BirthDateStart ?? (object)DBNull.Value, DbType.Date, ParameterDirection.Input);
+            parameters.Add("@BirthDateEnd", filter.BirthDateEnd ?? (object)DBNull.Value, DbType.Date, ParameterDirection.Input);
+            parameters.Add("@EntryDateStart", filter.EntryDateStart ?? (object)DBNull.Value, DbType.Date, ParameterDirection.Input);
+            parameters.Add("@EntryDateEnd", filter.EntryDateEnd ?? (object)DBNull.Value, DbType.Date, ParameterDirection.Input);
+            parameters.Add("@GenderId", filter.GenderId ?? (object)DBNull.Value, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@MaritalStatusId", filter.MaritalStatusId ?? (object)DBNull.Value, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@HasPoliticalParty", filter.HasPoliticalParty ?? (object)DBNull.Value, DbType.Boolean, ParameterDirection.Input);
+            parameters.Add("@HasSocialInsuranceNumber", filter.HasSocialInsuranceNumber ?? (object)DBNull.Value, DbType.Boolean, ParameterDirection.Input);
+            parameters.Add("@TabelNumber", filter.TabelNumber ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
+            parameters.Add("@AnvisUserId", filter.AnvisUserId ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
+            parameters.Add("@IsWorking", filter.IsWorking ?? (object)DBNull.Value, DbType.Boolean, ParameterDirection.Input);
+            parameters.Add("@OrganizationFullName", filter.OrganizationFullName ?? (object)DBNull.Value, DbType.String, ParameterDirection.Input);
 
-            string query = @"exec GetEmployeesInChunks @Skip, @Take";
-
-            using (var multi = await db.QueryMultipleAsync(query, parameters))
+            using (var multi = await db.QueryMultipleAsync("dbo.GetEmployeesInChunks", parameters, commandType: CommandType.StoredProcedure))
             {
-                // First result set: Get the total count of employees
                 int totalCount = multi.Read<int>().Single();
-
-                // Second result set: Get the actual employee data
                 var employees = multi.Read<EmployeesChunk>().ToList();
-
-
                 var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
 
                 return (pageInfo, employees);
@@ -78,4 +87,16 @@ public class EmployeesRepository : IEmployeesRepository
         }
     }
 
+    public async Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var query = "dbo.GetUserGeneralInfo";
+            var employee = await db.QueryFirstOrDefaultAsync<EmployeeGeneralInfoDto>(query, parameters, commandType: CommandType.StoredProcedure);
+            return employee!;  
+        }
+    }
 }
