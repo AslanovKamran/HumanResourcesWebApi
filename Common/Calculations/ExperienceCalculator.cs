@@ -1,6 +1,6 @@
 ﻿namespace HumanResourcesWebApi.Common.Calculations
 {
-    public static class ExperienceCalculator
+    public static  class ExperienceCalculator
     {
         public static (int years, int months, int days) CalculatePreviousExperience(int? trainershipYear, int? trainershipMonth, int? trainershipDay)
         {
@@ -55,5 +55,6 @@
             }
             return (totalYears, totalMonths, totalDays);
         }
+        
     }
 }

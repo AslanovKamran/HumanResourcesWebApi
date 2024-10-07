@@ -1,11 +1,11 @@
-﻿using HumanResourcesWebApi.Models.Domain;
+﻿using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Common.Filters;
+using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests;
-using HumanResourcesWebApi.Common.Filters;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -15,6 +15,7 @@ public class EmployeesRepository : IEmployeesRepository
 
     public EmployeesRepository(string connectionString) => _connectionString = connectionString;
 
+    #region Get
 
     public async Task<(PageInfo PageInfo, List<EmployeesChunk> Employees)> GetEmployeesChunkAsync(EmployeeFilter filter, int itemsPerPage = 10, int currentPage = 1)
     {
@@ -54,7 +55,22 @@ public class EmployeesRepository : IEmployeesRepository
             }
         }
     }
+    public async Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
 
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var query = "dbo.GetUserGeneralInfo";
+            var employee = await db.QueryFirstOrDefaultAsync<EmployeeGeneralInfoDto>(query, parameters, commandType: CommandType.StoredProcedure);
+            return employee!;  
+        }
+    }
+
+    #endregion
+
+    #region Add
 
     public async Task AddEmployeeAsync(AddEmployeeRequest request)
     {
@@ -87,16 +103,50 @@ public class EmployeesRepository : IEmployeesRepository
         }
     }
 
-    public async Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+    #endregion
 
+    #region Update
+
+    public async Task UpdateEmployeeGeneralInfoAsync(UpdateEmployeeGeneralInfoRequest request)
+    {
         using (var db = new SqlConnection(_connectionString))
         {
-            var query = "dbo.GetUserGeneralInfo";
-            var employee = await db.QueryFirstOrDefaultAsync<EmployeeGeneralInfoDto>(query, parameters, commandType: CommandType.StoredProcedure);
-            return employee!;  
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", request.Id);
+            parameters.Add("@Surname", request.Surname);
+            parameters.Add("@Name", request.Name);
+            parameters.Add("@FatherName", request.FatherName);
+            parameters.Add("@PhotoUrl", request.PhotoUrl);
+            parameters.Add("@BirthDate", request.BirthDate);
+            parameters.Add("@BirthPlace", request.BirthPlace);
+            parameters.Add("@NationalityId", request.NationalityId);
+            parameters.Add("@GenderId", request.GenderId);
+            parameters.Add("@MaritalStatusId", request.MaritalStatusId);
+            parameters.Add("@SocialInsuranceNumber", request.SocialInsuranceNumber);
+            parameters.Add("@TabelNumber", request.TabelNumber);
+            parameters.Add("@AnvisUserId", request.AnvisUserId);
+            parameters.Add("@TrainershipYear", request.TrainershipYear);
+            parameters.Add("@TrainershipMonth", request.TrainershipMonth);
+            parameters.Add("@TrainershipDay", request.TrainershipDay);
+            parameters.Add("@RegistrationAddress", request.RegistrationAddress);
+            parameters.Add("@LivingAddress", request.LivingAddress);
+            parameters.Add("@MobileNumber", request.MobileNumber);
+            parameters.Add("@MobileNumber2", request.MobileNumber2);
+            parameters.Add("@MobileNumber3", request.MobileNumber3);
+            parameters.Add("@TelephoneNumber", request.TelephoneNumber);
+            parameters.Add("@InternalNumber", request.InternalNumber);
+            parameters.Add("@Email", request.Email);
+            parameters.Add("@IsTradeUnionMember", request.IsTradeUnionMember);
+            parameters.Add("@IsVeteran", request.IsVeteran);
+            parameters.Add("@HasWarInjury", request.HasWarInjury);
+            parameters.Add("@DisabilityDegree", request.DisabilityDegree);
+            parameters.Add("@HasDisabledChild", request.HasDisabledChild);
+            parameters.Add("@IsRefugeeFromAnotherCountry", request.IsRefugeeFromAnotherCountry);
+            parameters.Add("@IsRefugee", request.IsRefugee);
+
+            await db.ExecuteAsync("UpdateEmployeeGeneralInfo", parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
 }

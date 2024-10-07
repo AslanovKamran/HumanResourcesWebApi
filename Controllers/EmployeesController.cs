@@ -14,6 +14,8 @@ namespace HumanResourcesWebApi.Controllers
 
         public EmployeesController(IEmployeesRepository repos) => _repos = repos;
 
+        #region Get
+
         [HttpGet]
         public async Task<IActionResult> GetChunk([FromQuery] EmployeeFilter filter, [FromQuery] int itemsPerPage = 10, [FromQuery] int currentPage = 1)
         {
@@ -54,7 +56,6 @@ namespace HumanResourcesWebApi.Controllers
             }
             catch (SqlException ex)
             {
-                // Returning 409 Conflict for database conflicts
                 return Conflict(new { message = "Database conflict occurred", details = ex.Message });
             }
             catch (Exception ex)
@@ -62,6 +63,10 @@ namespace HumanResourcesWebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
             }
         }
+
+        #endregion
+
+        #region Post
 
         [HttpPost]
         public async Task<IActionResult> AddEmployee([FromForm] AddEmployeeRequest request)
@@ -83,5 +88,32 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        #endregion
+
+        #region Put
+
+        [HttpPut("updateInfo")]
+        public async Task<IActionResult> UpdateEmployeeGeneralInfo([FromForm] UpdateEmployeeGeneralInfoRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)) });
+
+            try
+            {
+                await _repos.UpdateEmployeeGeneralInfoAsync(request);
+                return Ok(new { message = "An employee has been successfully updated!" });
+            }
+            catch (SqlException ex)
+            {
+                return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+            }
+        }
+
+
+        #endregion
     }
 }
