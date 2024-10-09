@@ -1,9 +1,9 @@
-﻿using HumanResourcesWebApi.Models.Requests;
-using HumanResourcesWebApi.Common.Mapper;
+﻿using HumanResourcesWebApi.Common.Mapper;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
+using HumanResourcesWebApi.Models.Requests.StateTables;
 
 namespace HumanResourcesWebApi.Controllers;
 

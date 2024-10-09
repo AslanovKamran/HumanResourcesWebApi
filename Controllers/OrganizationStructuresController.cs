@@ -1,7 +1,7 @@
-﻿using HumanResourcesWebApi.Models.Requests;
-using HumanResourcesWebApi.Abstract;
+﻿using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using HumanResourcesWebApi.Models.Requests.OrganizationStructures;
 
 namespace HumanResourcesWebApi.Controllers
 {

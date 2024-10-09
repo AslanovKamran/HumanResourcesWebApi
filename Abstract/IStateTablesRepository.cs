@@ -1,5 +1,5 @@
 ﻿using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Models.Requests.StateTables;
 using Microsoft.Data.SqlClient;
 using System.Data;
 

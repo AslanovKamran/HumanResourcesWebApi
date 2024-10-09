@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HumanResourcesWebApi.Models.Requests;
+namespace HumanResourcesWebApi.Models.Requests.Employees;
 
 public class UpdateEmployeeGeneralInfoRequest
 {
@@ -8,15 +8,15 @@ public class UpdateEmployeeGeneralInfoRequest
     public int Id { get; set; }
 
     [StringLength(100)]
-    [Required(AllowEmptyStrings =false)]
+    [Required(AllowEmptyStrings = false)]
     public string Surname { get; set; } = string.Empty;
 
     [StringLength(100)]
-    [Required(AllowEmptyStrings =false)]
+    [Required(AllowEmptyStrings = false)]
     public string Name { get; set; } = string.Empty;
 
     [StringLength(100)]
-    [Required(AllowEmptyStrings =false)]
+    [Required(AllowEmptyStrings = false)]
     public string FatherName { get; set; } = string.Empty;
 
     [Url]
@@ -34,13 +34,13 @@ public class UpdateEmployeeGeneralInfoRequest
     public int MaritalStatusId { get; set; }
 
     [StringLength(255)]
-    public string? SocialInsuranceNumber { get; set; } 
+    public string? SocialInsuranceNumber { get; set; }
 
     [StringLength(255)]
-    public string? TabelNumber { get; set; } 
+    public string? TabelNumber { get; set; }
 
     [StringLength(255)]
-    public string? AnvisUserId { get; set; } 
+    public string? AnvisUserId { get; set; }
 
     [Range(0, int.MaxValue, ErrorMessage = "Year must be a positive number")]
     public int? TrainershipYear { get; set; }
@@ -52,18 +52,18 @@ public class UpdateEmployeeGeneralInfoRequest
     public int? TrainershipDay { get; set; }
 
     [StringLength(255)]
-    public string? RegistrationAddress { get; set; } 
+    public string? RegistrationAddress { get; set; }
 
     [StringLength(255)]
     public string? LivingAddress { get; set; }
 
     [Phone]
     [StringLength(255)]
-    public string? MobileNumber { get; set; } 
+    public string? MobileNumber { get; set; }
 
     [Phone]
     [StringLength(255)]
-    public string? MobileNumber2 { get; set; } 
+    public string? MobileNumber2 { get; set; }
 
     [Phone]
     [StringLength(255)]
@@ -74,11 +74,11 @@ public class UpdateEmployeeGeneralInfoRequest
     public string? TelephoneNumber { get; set; }
 
     [StringLength(100)]
-    public string? InternalNumber { get; set; } 
+    public string? InternalNumber { get; set; }
 
     [EmailAddress]
     [StringLength(255)]
-    public string? Email { get; set; } 
+    public string? Email { get; set; }
 
     public bool IsTradeUnionMember { get; set; }
     public bool IsVeteran { get; set; }
@@ -86,7 +86,7 @@ public class UpdateEmployeeGeneralInfoRequest
 
     [Range(1, 3, ErrorMessage = "Disability degree must be between 1 and 3")]
     public int? DisabilityDegree { get; set; }
-    public bool HasDisabledChild { get; set; } 
+    public bool HasDisabledChild { get; set; }
     public bool IsRefugeeFromAnotherCountry { get; set; }
     public bool IsRefugee { get; set; }
 }

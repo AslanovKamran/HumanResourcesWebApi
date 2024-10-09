@@ -1,20 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HumanResourcesWebApi.Models.Requests
+namespace HumanResourcesWebApi.Models.Requests.OrganizationStructures
 {
     public class UpdateOrganizationStructureRequest
     {
         [Key]
         public int Id { get; set; }
 
-        [MaxLength(10)] 
+        [MaxLength(10)]
         public string? Code { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]  
-        [MaxLength(100)]  
+        [Required(ErrorMessage = "Name is required")]
+        [MaxLength(100)]
         public required string Name { get; set; }
 
-        [DataType(DataType.Date)]  
+        [DataType(DataType.Date)]
         public DateTime? BeginningHistory { get; set; }
 
         public string? FirstNumber { get; set; }
@@ -28,10 +28,10 @@ namespace HumanResourcesWebApi.Models.Requests
         public bool Canceled { get; set; }
 
         [MaxLength(200)]
-        public string? HeadName{ get; set; }
+        public string? HeadName { get; set; }
 
         [MaxLength(200)]
-        public string? HeadPosition{ get; set; }
+        public string? HeadPosition { get; set; }
 
         public bool IsSeaCoef { get; set; }
     }

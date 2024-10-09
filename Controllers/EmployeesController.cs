@@ -1,8 +1,8 @@
-﻿using HumanResourcesWebApi.Models.Requests;
-using HumanResourcesWebApi.Common.Filters;
+﻿using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using HumanResourcesWebApi.Models.Requests.Employees;
 
 namespace HumanResourcesWebApi.Controllers
 {
@@ -41,7 +41,7 @@ namespace HumanResourcesWebApi.Controllers
         }
 
         [HttpGet("generalInfo")]
-        public async Task<IActionResult> GetEmployeeGeneralInfo([FromQuery] int id)
+        public async Task<IActionResult> GetEmployeeGeneralInfo(int id)
         {
             try
             {

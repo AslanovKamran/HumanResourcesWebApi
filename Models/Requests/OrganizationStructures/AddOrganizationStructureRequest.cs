@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HumanResourcesWebApi.Models.Requests;
+namespace HumanResourcesWebApi.Models.Requests.OrganizationStructures;
 
 public class AddOrganizationStructureRequest
 {

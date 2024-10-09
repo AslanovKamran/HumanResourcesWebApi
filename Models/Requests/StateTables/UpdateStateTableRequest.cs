@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HumanResourcesWebApi.Models.Requests
+namespace HumanResourcesWebApi.Models.Requests.StateTables
 {
     public class UpdateStateTableRequest
     {
@@ -57,7 +57,7 @@ namespace HumanResourcesWebApi.Models.Requests
 
         public int? TabelPosition { get; set; }
 
-        public bool IsCanceled { get; set; } 
+        public bool IsCanceled { get; set; }
     }
 
 }

@@ -3,7 +3,7 @@ using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests;
+using HumanResourcesWebApi.Models.Requests.StateTables;
 
 namespace HumanResourcesWebApi.Repository.Dapper
 {

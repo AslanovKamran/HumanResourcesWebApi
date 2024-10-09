@@ -1,11 +1,11 @@
-﻿using HumanResourcesWebApi.Models.Requests;
-using HumanResourcesWebApi.Common.Filters;
+﻿using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
+using HumanResourcesWebApi.Models.Requests.Employees;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
