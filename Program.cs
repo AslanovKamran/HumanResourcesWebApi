@@ -17,6 +17,7 @@ builder.Services.AddScoped<IStateTablesRepository, StateTablesRepository>(provid
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
 builder.Services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
 builder.Services.AddScoped<ICertificatesRepository, CertificatesRepositoty>(provider => new CertificatesRepositoty(connectionString));
+builder.Services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
 
 #endregion
 
@@ -24,7 +25,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
-{
+{   
     c.DisplayRequestDuration();
 });
 

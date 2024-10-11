@@ -64,7 +64,7 @@ public class EmployeesRepository : IEmployeesRepository
         {
             var query = "dbo.GetUserGeneralInfo";
             var employee = await db.QueryFirstOrDefaultAsync<EmployeeGeneralInfoDto>(query, parameters, commandType: CommandType.StoredProcedure);
-            return employee!;  
+            return employee!;
         }
     }
 
@@ -97,7 +97,7 @@ public class EmployeesRepository : IEmployeesRepository
                                              @EntryDate, 
                                              @StateTableId, 
                                              @PhotoUrl";
-                                            
+
 
             await connection.ExecuteAsync(query, parameters);
         }
@@ -145,6 +145,24 @@ public class EmployeesRepository : IEmployeesRepository
             parameters.Add("@IsRefugee", request.IsRefugee);
 
             await db.ExecuteAsync("UpdateEmployeeGeneralInfo", parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    #endregion
+
+    #region Delete
+
+    public async Task DeleteEmployeeAsync(int id) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Id",id, DbType.Int32, ParameterDirection.Input);
+
+        var query = @"DeleteEmployee";
+
+        using (var db = new SqlConnection(_connectionString)) 
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 

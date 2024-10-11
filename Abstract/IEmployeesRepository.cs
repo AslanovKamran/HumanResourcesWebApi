@@ -11,4 +11,5 @@ public interface IEmployeesRepository
     Task AddEmployeeAsync(AddEmployeeRequest request);
     Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id);
     Task UpdateEmployeeGeneralInfoAsync(UpdateEmployeeGeneralInfoRequest request);
+    Task DeleteEmployeeAsync(int id);
 }

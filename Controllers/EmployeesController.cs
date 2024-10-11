@@ -3,6 +3,7 @@ using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Repository.Dapper;
 
 namespace HumanResourcesWebApi.Controllers
 {
@@ -114,6 +115,31 @@ namespace HumanResourcesWebApi.Controllers
         }
 
 
+        #endregion
+
+        #region Delete
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            try
+            {
+                // Call the repository method to perform the soft delete
+                await _repos.DeleteEmployeeAsync(id);
+
+                return Ok(new { message = "Employee has been set as inactive successfully." });
+            }
+            catch (SqlException ex)
+            {
+                // Handle SQL-specific errors
+                return StatusCode(500, new { message = "Database error occurred.", details = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Handle general errors
+                return StatusCode(500, new { message = "An error occurred.", details = ex.Message });
+            }
+        }
         #endregion
     }
 }
