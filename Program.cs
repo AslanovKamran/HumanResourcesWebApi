@@ -18,6 +18,8 @@ builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider =
 builder.Services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
 builder.Services.AddScoped<ICertificatesRepository, CertificatesRepositoty>(provider => new CertificatesRepositoty(connectionString));
 builder.Services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
+builder.Services.AddScoped<IVacationsRepository, VacationsRepository>(provider => new VacationsRepository(connectionString));
+builder.Services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
 
 #endregion
 
