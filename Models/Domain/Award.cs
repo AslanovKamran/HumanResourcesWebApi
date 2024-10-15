@@ -6,7 +6,6 @@ public class Award
     public DateTime OrderDate { get; set; }
     public int  EmployeeId { get; set; }
     public string? Note { get; set; }
-    public int TypeId { get; set; }
     public string OrderNumber { get; set; } = string.Empty;
     public string? Amount { get; set; } 
 }

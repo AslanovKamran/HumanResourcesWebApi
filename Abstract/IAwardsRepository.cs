@@ -1,4 +1,5 @@
 ﻿using HumanResourcesWebApi.Models.Domain;
+using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Models.Requests.Awards;
 
 namespace HumanResourcesWebApi.Abstract;
@@ -6,7 +7,7 @@ namespace HumanResourcesWebApi.Abstract;
 public interface IAwardsRepository
 {
     // Retrieve awards by EmployeeId
-    Task<List<Award>> GetAwardsAsync(int employeeId);
+    Task<List<EmloyeeAward>> GetAwardsAsync(int employeeId);
 
     // Add a new award
     Task AddAwardAsync(AddAwardRequest request);

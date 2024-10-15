@@ -1,9 +1,9 @@
-﻿using Dapper;
+﻿using HumanResourcesWebApi.Models.Requests.Awards;
+using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests.Awards;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -16,8 +16,9 @@ public class AwardsRepository : IAwardsRepository
         _connectionString = connectionString;
     }
 
+
     // Retrieve awards by EmployeeId
-    public async Task<List<Award>> GetAwardsAsync(int employeeId)
+    public async Task<List<EmloyeeAward>> GetAwardsAsync(int employeeId)
     {
         using (var db = new SqlConnection(_connectionString))
         {
@@ -25,7 +26,7 @@ public class AwardsRepository : IAwardsRepository
             parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
 
             var query = "GetAwards";
-            var result = await db.QueryAsync<Award>(query, parameters, commandType: CommandType.StoredProcedure);
+            var result = await db.QueryAsync<EmloyeeAward>(query, parameters, commandType: CommandType.StoredProcedure);
             return result.AsList();
         }
     }
