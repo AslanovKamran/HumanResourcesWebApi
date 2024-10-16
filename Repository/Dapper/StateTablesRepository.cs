@@ -1,9 +1,9 @@
-﻿using HumanResourcesWebApi.Models.Domain;
+﻿using HumanResourcesWebApi.Models.Requests.StateTables;
+using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests.StateTables;
 
 namespace HumanResourcesWebApi.Repository.Dapper
 {

@@ -27,7 +27,7 @@ public class WorkActivitiesRepository : IWorkActivitiesRepository
     }
     public async Task UpdateWorkActivityAsync(UpdateWorkActivityRequest request)
     {
-        var query = "UpdateWorkActivity"; // Stored procedure name
+        var query = "UpdateWorkActivity"; 
 
         var parameters = new DynamicParameters();
         parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
@@ -48,7 +48,7 @@ public class WorkActivitiesRepository : IWorkActivitiesRepository
     }
     public async Task DeleteWorkActivityAsync(int id)
     {
-        var query = "DeleteWorkActivity"; // Stored procedure name
+        var query = "DeleteWorkActivity"; 
 
         using (var db = new SqlConnection(_connectionString))
         {
@@ -60,7 +60,7 @@ public class WorkActivitiesRepository : IWorkActivitiesRepository
     }
     public async Task AddWorkActivityAsync(AddWorkActivityRequest request)
     {
-        var query = "AddWorkActivity"; // Stored procedure name
+        var query = "AddWorkActivity";
 
         var parameters = new DynamicParameters();
         parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);

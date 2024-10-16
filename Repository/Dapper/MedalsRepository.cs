@@ -1,9 +1,9 @@
-﻿using Dapper;
-using HumanResourcesWebApi.Abstract;
+﻿using HumanResourcesWebApi.Models.Requests.Medals;
 using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Medals;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 

@@ -1,9 +1,8 @@
-﻿using Dapper;
+﻿using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Domain;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Data.SqlTypes;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 

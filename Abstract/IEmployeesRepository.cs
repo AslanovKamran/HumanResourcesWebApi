@@ -2,6 +2,7 @@
 using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Models.Requests.PoliticalParties;
 
 namespace HumanResourcesWebApi.Abstract;
 
@@ -12,4 +13,6 @@ public interface IEmployeesRepository
     Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id);
     Task UpdateEmployeeGeneralInfoAsync(UpdateEmployeeGeneralInfoRequest request);
     Task DeleteEmployeeAsync(int id);
+    Task<EmployeeParty> GetPoliticalPartyAsync(int id);
+    Task UpdatePoliticalPartyAsync(UpdatePoliticalPartyRequest request);
 }

@@ -16,8 +16,6 @@ public class AwardsRepository : IAwardsRepository
         _connectionString = connectionString;
     }
 
-
-    // Retrieve awards by EmployeeId
     public async Task<List<EmloyeeAward>> GetAwardsAsync(int employeeId)
     {
         using (var db = new SqlConnection(_connectionString))
@@ -31,7 +29,6 @@ public class AwardsRepository : IAwardsRepository
         }
     }
 
-    // Add a new award
     public async Task AddAwardAsync(AddAwardRequest request)
     {
         using (var db = new SqlConnection(_connectionString))
@@ -50,7 +47,6 @@ public class AwardsRepository : IAwardsRepository
         }
     }
 
-    // Update an existing award
     public async Task UpdateAwardAsync(UpdateAwardRequest request)
     {
         using (var db = new SqlConnection(_connectionString))
@@ -68,7 +64,6 @@ public class AwardsRepository : IAwardsRepository
         }
     }
 
-    // Delete an award by Id
     public async Task DeleteAwardAsync(int id)
     {
         using (var db = new SqlConnection(_connectionString))

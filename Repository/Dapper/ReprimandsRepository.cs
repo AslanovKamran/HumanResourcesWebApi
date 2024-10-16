@@ -1,9 +1,9 @@
-﻿using HumanResourcesWebApi.Models.DTO;
+﻿using HumanResourcesWebApi.Models.Requests.Reprimands;
+using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests.Reprimands;
 
 namespace HumanResourcesWebApi.Repository.Dapper
 {
@@ -71,7 +71,5 @@ namespace HumanResourcesWebApi.Repository.Dapper
                 await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
             }
         }
-
-
     }
 }

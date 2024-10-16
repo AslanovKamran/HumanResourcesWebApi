@@ -1,9 +1,9 @@
-﻿using HumanResourcesWebApi.Common.Filters;
+﻿using HumanResourcesWebApi.Models.Requests.PoliticalParties;
+using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using HumanResourcesWebApi.Models.Requests.Employees;
-using HumanResourcesWebApi.Repository.Dapper;
 
 namespace HumanResourcesWebApi.Controllers
 {
@@ -12,7 +12,6 @@ namespace HumanResourcesWebApi.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeesRepository _repos;
-
         public EmployeesController(IEmployeesRepository repos) => _repos = repos;
 
         #region Get
@@ -65,6 +64,24 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        [HttpGet("politicalParty")]
+        public async Task<IActionResult> GetEmployeePoliticalPartyInfo(int id)
+        {
+            try
+            {
+                var politicalPartyInfo = await _repos.GetPoliticalPartyAsync(id);
+                if (politicalPartyInfo == null || String.IsNullOrWhiteSpace(politicalPartyInfo.PoliticalParty))
+                {
+                    return NotFound(new { message = "No political party information found for the specified employee." });
+                }
+                return Ok(politicalPartyInfo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred", details = ex.Message });
+            }
+        }
+
         #endregion
 
         #region Post
@@ -114,6 +131,28 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        [HttpPut("politicalparty")]
+        public async Task<IActionResult> UpdatePoliticalParty([FromForm] UpdatePoliticalPartyRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    message = "Validation failed",
+                    errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                });
+            }
+
+            try
+            {
+                await _repos.UpdatePoliticalPartyAsync(request);
+                return Ok(new { message = "Political party information updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating the political party information.", details = ex.Message });
+            }
+        }
 
         #endregion
 

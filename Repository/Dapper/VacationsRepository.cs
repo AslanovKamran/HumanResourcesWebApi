@@ -1,18 +1,16 @@
-﻿using Dapper;
-using HumanResourcesWebApi.Abstract;
+﻿using HumanResourcesWebApi.Models.Requests.Vacations;
 using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Vacations;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
 public class VacationsRepository : IVacationsRepository
 {
     private readonly string _connectionString;
-
     public VacationsRepository(string connectionString) => _connectionString = connectionString;
-
     public async Task<List<EmployeeVacation>> GetVacationsAsync(int employeeId, int? yearStarted = null, int? yearEnded = null)
     {
         var parameters = new DynamicParameters();
@@ -29,8 +27,6 @@ public class VacationsRepository : IVacationsRepository
             return result;
         }
     }
-
-
     public async Task AddVacationAsync(AddVacationRequest request)
     {
         var parameters = new DynamicParameters();
@@ -49,7 +45,6 @@ public class VacationsRepository : IVacationsRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
-
     public async Task UpdateVacationAsync(UpdateVacationRequest request)
     {
         var parameters = new DynamicParameters();
@@ -67,7 +62,6 @@ public class VacationsRepository : IVacationsRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
-
     public async Task DeleteVacationAsync(int id)
     {
         var parameters = new DynamicParameters();

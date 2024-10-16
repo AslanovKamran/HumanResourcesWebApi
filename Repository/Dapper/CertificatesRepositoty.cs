@@ -1,10 +1,9 @@
-﻿using Dapper;
-using HumanResourcesWebApi.Abstract;
+﻿using HumanResourcesWebApi.Models.Requests.Certificates;
 using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Certificates;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 

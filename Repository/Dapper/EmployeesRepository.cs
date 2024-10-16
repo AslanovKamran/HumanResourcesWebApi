@@ -1,11 +1,12 @@
-﻿using HumanResourcesWebApi.Common.Filters;
+﻿using HumanResourcesWebApi.Models.Requests.PoliticalParties;
+using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests.Employees;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -68,6 +69,18 @@ public class EmployeesRepository : IEmployeesRepository
         }
     }
 
+    public async Task<EmployeeParty> GetPoliticalPartyAsync(int id)
+    {
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var query = "dbo.GetPoliticalParty";
+            var result = await db.QueryFirstOrDefaultAsync<EmployeeParty>(query, parameters, commandType: CommandType.StoredProcedure);
+            return result!;
+        }
+    }
     #endregion
 
     #region Add
@@ -148,6 +161,22 @@ public class EmployeesRepository : IEmployeesRepository
         }
     }
 
+    public async Task UpdatePoliticalPartyAsync(UpdatePoliticalPartyRequest request)
+    {
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("PoliticalParty", request.PoliticalParty, DbType.String, ParameterDirection.Input);
+            parameters.Add("PartyMembershipNumber", request.PartyMembershipNumber, DbType.String, ParameterDirection.Input);
+            parameters.Add("PartyEntranceDate", request.PartyEntranceDate, DbType.Date, ParameterDirection.Input);
+            parameters.Add("PartyCardGivenDate", request.PartyCardGivenDate, DbType.Date, ParameterDirection.Input);
+            parameters.Add("PartyOrganizationRegion", request.PartyOrganizationRegion, DbType.String, ParameterDirection.Input);
+
+            var query = "UpdatePoliticalParty";
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
     #endregion
 
     #region Delete
@@ -165,6 +194,8 @@ public class EmployeesRepository : IEmployeesRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    
 
     #endregion
 }

@@ -1,9 +1,9 @@
-﻿using Dapper;
-using HumanResourcesWebApi.Abstract;
+﻿using HumanResourcesWebApi.Models.Requests.Educations;
 using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Educations;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -12,7 +12,6 @@ public class EducationRepository : IEducationRepository
     private readonly string _connectionString;
 
     public EducationRepository(string connectionString) => _connectionString = connectionString;
-
    
     public async Task<List<EmployeeEducation>> GetEmployeeEducationAsync(int employeeId)
     {
@@ -49,7 +48,6 @@ public class EducationRepository : IEducationRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
-
 
     public async Task UpdateEmployeeEducationAsync(UpdateEmployeeEducationRequest education)
     {

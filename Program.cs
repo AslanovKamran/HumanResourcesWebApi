@@ -1,5 +1,3 @@
-using HumanResourcesWebApi.Repository.Dapper;
-using HumanResourcesWebApi.Abstract;
 using HumanResourcesWebApi.ServiceExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +6,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("Network")!;
+var connectionString = builder.Configuration.GetConnectionString("Network");
 
 
-builder.Services.AddCustomRepositories(connectionString);
+builder.Services.AddCustomRepositories(connectionString!);
 
 
 var app = builder.Build();
