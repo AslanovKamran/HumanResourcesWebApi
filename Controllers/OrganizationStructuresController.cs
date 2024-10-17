@@ -10,14 +10,8 @@ namespace HumanResourcesWebApi.Controllers
     public class OrganizationStructuresController : ControllerBase
     {
         private readonly IOrganizationStructuresRepository _repos;
-        private readonly ILogger<OrganizationStructuresController> _logger; 
-        public OrganizationStructuresController(IOrganizationStructuresRepository repos, 
-            ILogger<OrganizationStructuresController> logger)
-        {
-            _repos = repos;
-            _logger = logger;
 
-        }
+        public OrganizationStructuresController(IOrganizationStructuresRepository repos) => _repos = repos;
 
         [HttpGet]
         public async Task<IActionResult> GetAllOrganizations([FromQuery] bool includeCanceled = false)
@@ -69,12 +63,12 @@ namespace HumanResourcesWebApi.Controllers
             }
             catch (SqlException ex)
             {
-                _logger.LogError(ex, "SQL error occurred while updating organization.");
+                
                 return Conflict($"SQL Exception:\n Error Code: {ex.ErrorCode}\nError Message: {ex.Message}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Internal server error occured.");
+              
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }

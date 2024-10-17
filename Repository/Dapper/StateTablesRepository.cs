@@ -12,7 +12,7 @@ namespace HumanResourcesWebApi.Repository.Dapper
         private readonly string _connectionString;
 
         public StateTablesRepository(string connectionString) => _connectionString = connectionString;
-        public async Task<(List<StateTable> stateTables, PageInfo pageInfo)> GetStateTablesAsync(int itemsPerPage, int currentPage, bool showOnlyActive)
+        public async Task<(List<StateTable> stateTables, PageInfo pageInfo)> GetStateTablesAsync(int itemsPerPage, int currentPage, bool showOnlyActive = true)
         {
             int skip = (currentPage - 1) * itemsPerPage;
             int take = itemsPerPage;
@@ -59,7 +59,7 @@ namespace HumanResourcesWebApi.Repository.Dapper
 
                 string query = @"GetStateTablesByOrganizationId @OrganizationId, @ShowOnlyActive";
 
-                // Use Dapper to map the results from the procedure
+               
                 var result = (await db.QueryAsync<StateTable, OrganizationStructure, StateWorkType, StateTable>(
                     query,
                     (stateTable, org, type) =>
@@ -101,29 +101,9 @@ namespace HumanResourcesWebApi.Repository.Dapper
                 parameters.Add("MonthlySalaryExtra", request.MonthlySalaryExtra, DbType.Int32);
                 parameters.Add("HarmfulnessCoefficient", request.HarmfulnessCoefficient, DbType.Int32);
 
-                string query = @"exec AddStateTable 
-                                                 @Name,
-                                                 @UnitCount,
-                                                 @MonthlySalaryFrom,
-                                                 @MonthlySalaryTo,
-                                                 @OccupiedPostCount,
-                                                 @DocumentNumber,
-                                                 @DocumentDate,
-                                                 @OrganizationStructureId,
-                                                 @WorkTypeId,
-                                                 @WorkHours,
-                                                 @WorkHoursSaturday,
-                                                 @TabelPosition,
-                                                 @TabelPriority,
-                                                 @ExcludeBankomat,
-                                                 @Degree,
-                                                 @HourlySalary,
-                                                 @IsCanceled,
-                                                 @WorkingHoursSpecial,
-                                                 @MonthlySalaryExtra,
-                                                 @HarmfulnessCoefficient";
-
-                await db.ExecuteAsync(query, parameters); // Execute without expecting a result
+                string query = @"AddStateTable";
+                                               
+                await db.ExecuteAsync(query, parameters, commandType:CommandType.StoredProcedure); 
             }
 
         }
@@ -153,14 +133,9 @@ namespace HumanResourcesWebApi.Repository.Dapper
                 parameters.Add("TabelPosition", request.TabelPosition, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("IsCanceled", request.IsCanceled, DbType.Boolean, ParameterDirection.Input);
 
-                string query = @"exec UpdateStateTable
-                                                    @Id, @Name, @Degree, @UnitCount, @MonthlySalaryFrom, 
-                                                    @HourlySalary, @MonthlySalaryExtra, @OccupiedPostCount, @DocumentNumber,
-                                                    @DocumentDate, @WorkTypeId, @OrganizationStructureId, @HarmfulnessCoefficient, 
-                                                    @WorkHours, @WorkingHoursSpecial, @WorkHoursSaturday, @TabelPriority, 
-                                                    @TabelPosition, @IsCanceled";
-
-                await db.ExecuteAsync(query, parameters);
+                string query = @"UpdateStateTable";
+                                                   
+                await db.ExecuteAsync(query, parameters, commandType:CommandType.StoredProcedure);
             }
         }
 
@@ -171,8 +146,8 @@ namespace HumanResourcesWebApi.Repository.Dapper
 
                 var parameters = new DynamicParameters();
                 parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
-                var query = @"exec SoftDeleteStateTable @Id";
-                await db.ExecuteAsync(query, parameters); // Execute without expecting a result
+                var query = @"SoftDeleteStateTable";
+                await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure); // Execute without expecting a result
             }
         }
     }

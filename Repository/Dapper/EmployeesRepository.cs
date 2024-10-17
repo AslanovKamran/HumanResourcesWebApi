@@ -100,19 +100,9 @@ public class EmployeesRepository : IEmployeesRepository
             parameters.Add("@StateTableId", request.StateTableId, DbType.Int32);
             parameters.Add("@PhotoUrl", request.PhotoUrl, DbType.String, size: 255);
 
-            var query = @"exec AddEmployee
-                                             @Id, 
-                                             @Surname, 
-                                             @Name, 
-                                             @FatherName, 
-                                             @GenderId, 
-                                             @MaritalStatusId, 
-                                             @EntryDate, 
-                                             @StateTableId, 
-                                             @PhotoUrl";
-
-
-            await connection.ExecuteAsync(query, parameters);
+            var query = @"AddEmployee";
+                                        
+            await connection.ExecuteAsync(query, parameters, commandType:CommandType.StoredProcedure);
         }
     }
 

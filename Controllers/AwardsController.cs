@@ -2,6 +2,7 @@
 using HumanResourcesWebApi.Models.Requests.Awards;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace HumanResourcesWebApi.Controllers
 {
@@ -16,7 +17,6 @@ namespace HumanResourcesWebApi.Controllers
             _repos = repos;
         }
 
-        // GET: api/awards/{employeeId}
         [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetAwards(int employeeId)
         {
@@ -53,9 +53,13 @@ namespace HumanResourcesWebApi.Controllers
                 await _repos.AddAwardAsync(request);
                 return Ok(new { message = "Award added successfully." });
             }
+            catch (SqlException ex)
+            {
+                return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while adding the award.", details = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
             }
         }
 

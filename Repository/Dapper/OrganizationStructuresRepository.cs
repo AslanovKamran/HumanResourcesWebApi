@@ -28,16 +28,11 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             parameters.Add("ParentId", request.ParentId, DbType.Int32, ParameterDirection.Input);
 
             // Make sure the procedure name matches your actual stored procedure
-            string query = @"exec AddOrganizationStructure 
-                         @Code, 
-                         @Name, 
-                         @BeginningHistory, 
-                         @FirstNumber, 
-                         @SecondNumber, 
-                         @ParentId";
+            string query = @"AddOrganizationStructure";
+                         
 
             // Use Dapper to execute the stored procedure and return the inserted entity
-            var insertedOrganization = await db.QuerySingleOrDefaultAsync<AddOrganizationStructureRequest>(query, parameters);
+            var insertedOrganization = await db.QuerySingleOrDefaultAsync<AddOrganizationStructureRequest>(query, parameters,commandType:CommandType.StoredProcedure);
 
             return insertedOrganization ?? throw new InvalidOperationException("Failed to insert organization structure.");
         }
@@ -57,20 +52,15 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
         }
     }
 
-    public async Task<List<OrganizationStructureListDTO>> GetOrganizationStructureListAsync(bool includeCanceled)
+    public async Task<List<OrganizationStructureListDTO>> GetOrganizationStructureListAsync(bool includeCanceled = false)
     {
+        var parameters = new DynamicParameters();
+        parameters.Add("IncludeCanceled", includeCanceled, DbType.Boolean, ParameterDirection.Input);
+        
+        string query = "GetOrganizationStructures";
         using (var connection = new SqlConnection(_connectionString))
         {
-            string query;
-
-            // Fetch all structures from the database
-            if (includeCanceled)
-                query = @"exec OrganizationStructures_GetOrganizationStructures";
-
-            //Fetch only existing structures
-            else query = @"exec OrganizationStructures_GetExistingOrganizationStructures";
-
-            var structures = (await connection.QueryAsync<OrganizationStructureListDTO>(query)).ToList();
+            var structures = (await connection.QueryAsync<OrganizationStructureListDTO>(query, parameters, commandType: CommandType.StoredProcedure)).AsList();
 
             var lookup = structures.ToLookup(s => s.ParentId);
 
@@ -98,23 +88,10 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             parameters.Add("IsSeaCoef", request.IsSeaCoef, DbType.Boolean, ParameterDirection.Input);
 
             // Make sure the procedure name matches your actual stored procedure
-            string query = @"exec 
-                                UpdateOrganizationStructure 
-                                @Id,
-                                @Code,
-                                @Name,
-                                @BeginningHistory,
-                                @FirstNumber,
-                                @SecondNumber,
-                                @TabelOrganizationId,
-                                @TabelPriority,
-                                @Canceled,
-                                @HeadName,
-                                @HeadPosition,
-                                @IsSeaCoef";
-
+            string query = @"UpdateOrganizationStructure";
+                                
             // Use Dapper to execute the stored procedure and return the inserted entity
-            var updatedOrganization = await db.QuerySingleOrDefaultAsync<UpdateOrganizationStructureRequest>(query, parameters);
+            var updatedOrganization = await db.QuerySingleOrDefaultAsync<UpdateOrganizationStructureRequest>(query, parameters, commandType: CommandType.StoredProcedure);
 
             return updatedOrganization ?? throw new InvalidOperationException("Failed to update organization structure.");
         }
@@ -127,8 +104,8 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
 
-            var query = "SoftDeleteOrganizationStructure @Id";
-            await db.ExecuteAsync(query, parameters); 
+            var query = "SoftDeleteOrganizationStructure";
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure); 
         }
     }
 
