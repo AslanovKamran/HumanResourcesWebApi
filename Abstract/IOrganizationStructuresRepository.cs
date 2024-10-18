@@ -1,6 +1,6 @@
-﻿using HumanResourcesWebApi.Models.DTO;
+﻿using HumanResourcesWebApi.Models.Requests.OrganizationStructures;
 using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests.OrganizationStructures;
+using HumanResourcesWebApi.Models.DTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

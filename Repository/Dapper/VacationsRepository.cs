@@ -7,10 +7,11 @@ using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class VacationsRepository : IVacationsRepository
+public class VacationsRepository(string connectionString) : IVacationsRepository
 {
-    private readonly string _connectionString;
-    public VacationsRepository(string connectionString) => _connectionString = connectionString;
+    private readonly string _connectionString = connectionString;
+
+    #region Get
     public async Task<List<EmployeeVacation>> GetVacationsAsync(int employeeId, int? yearStarted = null, int? yearEnded = null)
     {
         var parameters = new DynamicParameters();
@@ -27,6 +28,10 @@ public class VacationsRepository : IVacationsRepository
             return result;
         }
     }
+
+    #endregion
+
+    #region Add
     public async Task AddVacationAsync(AddVacationRequest request)
     {
         var parameters = new DynamicParameters();
@@ -45,6 +50,10 @@ public class VacationsRepository : IVacationsRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
+
+    #region Update
     public async Task UpdateVacationAsync(UpdateVacationRequest request)
     {
         var parameters = new DynamicParameters();
@@ -62,6 +71,10 @@ public class VacationsRepository : IVacationsRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
+
+    #region Delete
     public async Task DeleteVacationAsync(int id)
     {
         var parameters = new DynamicParameters();
@@ -74,5 +87,7 @@ public class VacationsRepository : IVacationsRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
 
 }

@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests.Certificates;
+﻿using HumanResourcesWebApi.Models.Requests.Certificates;
+using HumanResourcesWebApi.Models.Domain;
 
 namespace HumanResourcesWebApi.Abstract;
 

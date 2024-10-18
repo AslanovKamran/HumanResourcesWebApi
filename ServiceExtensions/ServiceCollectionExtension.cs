@@ -9,7 +9,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
         services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
-        services.AddScoped<IStateWorkTypesRepository, StateWorkTypesRepository>(provider => new StateWorkTypesRepository(connectionString));
         services.AddScoped<IIdentityCardsRepository, IdentityCardsRepository>(provider => new IdentityCardsRepository(connectionString));
         services.AddScoped<IFamilyMembersRepository, FamilyMembersRepository>(provider => new FamilyMembersRepository(connectionString));
         services.AddScoped<IPreviousNamesRepository, PreviousNamesRepository>(provider => new PreviousNamesRepository(connectionString));

@@ -7,25 +7,27 @@ using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class EducationRepository : IEducationRepository
+public class EducationRepository(string connectionString) : IEducationRepository
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = connectionString;
 
-    public EducationRepository(string connectionString) => _connectionString = connectionString;
-   
+    #region Get
+
     public async Task<List<EmployeeEducation>> GetEmployeeEducationAsync(int employeeId)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("EmployeeId", employeeId, DbType.Int32,ParameterDirection.Input);
+        parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
 
-        using (var db = new SqlConnection(_connectionString)) 
+        using (var db = new SqlConnection(_connectionString))
         {
             var query = "GetEmployeesEducation";
-            var result = (await db.QueryAsync<EmployeeEducation>(query,parameters, commandType:CommandType.StoredProcedure)).ToList();
-            return result;
-        } 
+            var result = (await db.QueryAsync<EmployeeEducation>(query, parameters, commandType: CommandType.StoredProcedure));
+            return result.AsList();
+        }
     }
+    #endregion
 
+    #region Add
     public async Task AddEmployeeEducationAsync(AddEmployeeEducationRequest education)
     {
         var parameters = new DynamicParameters();
@@ -49,6 +51,9 @@ public class EducationRepository : IEducationRepository
         }
     }
 
+    #endregion
+
+    #region Update
     public async Task UpdateEmployeeEducationAsync(UpdateEmployeeEducationRequest education)
     {
         var parameters = new DynamicParameters();
@@ -71,6 +76,9 @@ public class EducationRepository : IEducationRepository
         }
     }
 
+    #endregion
+
+    #region Delete
     public async Task DeleteEmployeeEducationAsync(int id)
     {
         var parameters = new DynamicParameters();
@@ -82,4 +90,7 @@ public class EducationRepository : IEducationRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
+
 }

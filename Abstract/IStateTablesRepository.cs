@@ -1,7 +1,5 @@
-﻿using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests.StateTables;
-using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using HumanResourcesWebApi.Models.Requests.StateTables;
+using HumanResourcesWebApi.Models.Domain;
 
 namespace HumanResourcesWebApi.Abstract;
 

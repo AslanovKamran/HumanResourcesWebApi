@@ -9,12 +9,15 @@ namespace HumanResourcesWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CertificatesController : ControllerBase
+    public class CertificatesController(ICertificatesRepository repos) : ControllerBase
     {
-        private readonly ICertificatesRepository _repos;
+        private readonly ICertificatesRepository _repos = repos;
 
-        public CertificatesController(ICertificatesRepository repos) => _repos = repos;
-
+        /// <summary>
+        /// Retrieves a list of certificates for a specific employee by their ID.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee whose certificates are being retrieved.</param>
+        /// <returns>A list of certificates associated with the specified employee, or an error if a conflict or server error occurs.</returns>
         [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetEmployeesCertificates(int employeeId) 
         {
@@ -33,6 +36,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds a new certificate for an employee.
+        /// </summary>
+        /// <param name="request">The details of the certificate to be added.</param>
+        /// <returns>A success message if the certificate is added, or a validation or conflict error if an issue occurs.</returns>
         [HttpPost]
         public async Task<IActionResult> AddCertificate([FromForm] AddCertificateRequest request) 
         {
@@ -60,6 +68,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing certificate based on the provided details.
+        /// </summary>
+        /// <param name="request">The updated certificate details.</param>
+        /// <returns>A success message if the update is successful, or an error if validation fails or a conflict occurs.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateCertificate([FromForm] UpdateCertificateRequest request)
         {
@@ -87,6 +100,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a certificate by its unique ID.
+        /// </summary>
+        /// <param name="id">The ID of the certificate to delete.</param>
+        /// <returns>A success message if the deletion is successful, or an error message if a conflict or server error occurs.</returns>
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCertificate(int id)
         {
@@ -104,6 +122,5 @@ namespace HumanResourcesWebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", details = ex.Message });
             }
         }
-
     }
 }

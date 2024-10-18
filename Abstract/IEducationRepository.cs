@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Educations;
+﻿using HumanResourcesWebApi.Models.Requests.Educations;
+using HumanResourcesWebApi.Models.DTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

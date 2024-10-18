@@ -9,12 +9,9 @@ namespace HumanResourcesWebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class WorkActivitiesController : ControllerBase
+public class WorkActivitiesController(IWorkActivitiesRepository repos) : ControllerBase
 {
-    private readonly IWorkActivitiesRepository _repos;
-
-    public WorkActivitiesController(IWorkActivitiesRepository repos) => _repos = repos;
-
+    private readonly IWorkActivitiesRepository _repos = repos;
 
     [HttpGet("{employeeId}")]
     public async Task<IActionResult> GetEmployeeWorkActivities(int employeeId) 
@@ -105,6 +102,5 @@ public class WorkActivitiesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred.", details = ex.Message });
         }
     }
-
 
 }

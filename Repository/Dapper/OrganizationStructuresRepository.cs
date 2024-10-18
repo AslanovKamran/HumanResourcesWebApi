@@ -1,44 +1,18 @@
-﻿using HumanResourcesWebApi.Models.Domain;
+﻿using HumanResourcesWebApi.Models.Requests.OrganizationStructures;
+using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests.OrganizationStructures;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class OrganizationStructuresRepository : IOrganizationStructuresRepository
+public class OrganizationStructuresRepository(string connectionString) : IOrganizationStructuresRepository
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = connectionString;
 
-    public OrganizationStructuresRepository(string connectionString) => _connectionString = connectionString;
-
-    public async Task<AddOrganizationStructureRequest> AddOrganizationStructureAsync(AddOrganizationStructureRequest request)
-    {
-
-        using (IDbConnection db = new SqlConnection(_connectionString))
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("Code", request.Code, DbType.String, ParameterDirection.Input);
-            parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);
-            parameters.Add("BeginningHistory", request.BeginningHistory, DbType.Date, ParameterDirection.Input);
-            parameters.Add("FirstNumber", request.FirstNumber, DbType.String, ParameterDirection.Input);
-            parameters.Add("SecondNumber", request.SecondNumber, DbType.String, ParameterDirection.Input);
-            parameters.Add("ParentId", request.ParentId, DbType.Int32, ParameterDirection.Input);
-
-            // Make sure the procedure name matches your actual stored procedure
-            string query = @"AddOrganizationStructure";
-                         
-
-            // Use Dapper to execute the stored procedure and return the inserted entity
-            var insertedOrganization = await db.QuerySingleOrDefaultAsync<AddOrganizationStructureRequest>(query, parameters,commandType:CommandType.StoredProcedure);
-
-            return insertedOrganization ?? throw new InvalidOperationException("Failed to insert organization structure.");
-        }
-    }
-
-   
+    #region Get
     public async Task<OrganizationStructure> GetOrganizationStructureByIdAsync(int id)
     {
         using (IDbConnection db = new SqlConnection(_connectionString))
@@ -56,7 +30,7 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
     {
         var parameters = new DynamicParameters();
         parameters.Add("IncludeCanceled", includeCanceled, DbType.Boolean, ParameterDirection.Input);
-        
+
         string query = "GetOrganizationStructures";
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -69,6 +43,34 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             return hierarchy;
         }
     }
+
+    #endregion
+
+    #region Add
+    public async Task<AddOrganizationStructureRequest> AddOrganizationStructureAsync(AddOrganizationStructureRequest request)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Code", request.Code, DbType.String, ParameterDirection.Input);
+        parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);
+        parameters.Add("BeginningHistory", request.BeginningHistory, DbType.Date, ParameterDirection.Input);
+        parameters.Add("FirstNumber", request.FirstNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("SecondNumber", request.SecondNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("ParentId", request.ParentId, DbType.Int32, ParameterDirection.Input);
+
+        string query = @"AddOrganizationStructure";
+
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+
+            var insertedOrganization = await db.QuerySingleOrDefaultAsync<AddOrganizationStructureRequest>(query, parameters, commandType: CommandType.StoredProcedure);
+            return insertedOrganization!;
+        }
+    }
+
+    #endregion
+
+    #region Update
+
     public async Task<UpdateOrganizationStructureRequest> UpdateOrganizationStrcuture(UpdateOrganizationStructureRequest request)
     {
         using (IDbConnection db = new SqlConnection(_connectionString))
@@ -89,7 +91,7 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
 
             // Make sure the procedure name matches your actual stored procedure
             string query = @"UpdateOrganizationStructure";
-                                
+
             // Use Dapper to execute the stored procedure and return the inserted entity
             var updatedOrganization = await db.QuerySingleOrDefaultAsync<UpdateOrganizationStructureRequest>(query, parameters, commandType: CommandType.StoredProcedure);
 
@@ -97,6 +99,9 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
         }
     }
 
+    #endregion
+
+    #region Delete
     public async Task DeleteOrganizationStructureAsync(int id)
     {
         using (IDbConnection db = new SqlConnection(_connectionString))
@@ -105,11 +110,13 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
             parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
 
             var query = "SoftDeleteOrganizationStructure";
-            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure); 
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 
+    #endregion
 
+    #region Hierarchy Builder
     // Helper method to build hierarchy for DTOs
     private List<OrganizationStructureListDTO> BuildHierarchy(ILookup<int?, OrganizationStructureListDTO> lookup, int? parentId)
     {
@@ -127,5 +134,6 @@ public class OrganizationStructuresRepository : IOrganizationStructuresRepositor
         return result;  // Return a List of DTOs
     }
 
+    #endregion
 
 }

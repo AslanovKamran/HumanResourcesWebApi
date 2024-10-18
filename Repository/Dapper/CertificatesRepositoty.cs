@@ -7,12 +7,27 @@ using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class CertificatesRepositoty : ICertificatesRepository
+public class CertificatesRepositoty(string connectionString) : ICertificatesRepository
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = connectionString;
 
-    public CertificatesRepositoty(string connectionString) => _connectionString = connectionString;
+    #region Get
+    public async Task<List<Certificate>> GetEmployeesCertificates(int employeeId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
+        var query = @"GetEmployeesCerificates";
 
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var result = (await db.QueryAsync<Certificate>(query, parameters, commandType: CommandType.StoredProcedure)).AsList();
+            return result;
+        }
+    }
+
+    #endregion
+
+    #region Add
     public async Task AddCertificateAsync(AddCertificateRequest request)
     {
         var parameters = new DynamicParameters();
@@ -31,19 +46,9 @@ public class CertificatesRepositoty : ICertificatesRepository
         }
     }
 
-    public async Task<List<Certificate>> GetEmployeesCertificates(int employeeId)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
-        var query = @"GetEmployeesCerificates";
+    #endregion
 
-        using (var db = new SqlConnection(_connectionString))
-        {
-            var result = (await db.QueryAsync<Certificate>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
-            return result;
-        }
-    }
-
+    #region Update
     public async Task UpdateCertificateAsync(UpdateCertificateRequest request)
     {
         var parameters = new DynamicParameters();
@@ -62,6 +67,9 @@ public class CertificatesRepositoty : ICertificatesRepository
         }
     }
 
+    #endregion
+
+    #region Delete
     public async Task DeleteCertificateAsync(int id)
     {
         var parameters = new DynamicParameters();
@@ -74,5 +82,7 @@ public class CertificatesRepositoty : ICertificatesRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
 
 }

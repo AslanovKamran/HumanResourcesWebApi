@@ -1,18 +1,17 @@
-﻿using HumanResourcesWebApi.Models.DTO;
+﻿using HumanResourcesWebApi.Models.Requests.FamilyMembers;
+using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.Requests.FamilyMembers;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class FamilyMembersRepository : IFamilyMembersRepository
+public class FamilyMembersRepository(string connectionString) : IFamilyMembersRepository
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = connectionString;
 
-    public FamilyMembersRepository(string connectionString) => _connectionString = connectionString;
-
+    #region Get
     public async Task<List<EmployeeFamilyMember>> GetFamilyMembersAsync(int employeeId)
     {
         var parameters = new DynamicParameters();
@@ -26,6 +25,10 @@ public class FamilyMembersRepository : IFamilyMembersRepository
             return result.AsList();
         }
     }
+
+    #endregion
+
+    #region Add
     public async Task AddFamilyMemberAsync(AddFamilyMemberRequest request)
     {
         var parameters = new DynamicParameters();
@@ -45,6 +48,9 @@ public class FamilyMembersRepository : IFamilyMembersRepository
         }
     }
 
+    #endregion
+
+    #region Update
     public async Task UpdateFamilyMemberAsync(UpdateFamilyMemberRequest request)
     {
         var parameters = new DynamicParameters();
@@ -63,6 +69,9 @@ public class FamilyMembersRepository : IFamilyMembersRepository
         }
     }
 
+    #endregion
+
+    #region Delete
     public async Task DeleteFamilyMemberAsync(int id)
     {
         var parameters = new DynamicParameters();
@@ -75,4 +84,7 @@ public class FamilyMembersRepository : IFamilyMembersRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    #endregion
+
 }

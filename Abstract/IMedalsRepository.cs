@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Medals;
+﻿using HumanResourcesWebApi.Models.Requests.Medals;
+using HumanResourcesWebApi.Models.DTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

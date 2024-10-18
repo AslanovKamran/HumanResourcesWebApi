@@ -10,11 +10,9 @@ using Dapper;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
-public class EmployeesRepository : IEmployeesRepository
+public class EmployeesRepository(string connectionString) : IEmployeesRepository
 {
-    private readonly string _connectionString;
-
-    public EmployeesRepository(string connectionString) => _connectionString = connectionString;
+    private readonly string _connectionString = connectionString;
 
     #region Get
 
@@ -49,7 +47,7 @@ public class EmployeesRepository : IEmployeesRepository
             using (var multi = await db.QueryMultipleAsync("dbo.GetEmployeesInChunks", parameters, commandType: CommandType.StoredProcedure))
             {
                 int totalCount = multi.Read<int>().Single();
-                var employees = multi.Read<EmployeesChunk>().ToList();
+                var employees = multi.Read<EmployeesChunk>().AsList();
                 var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
 
                 return (pageInfo, employees);
@@ -81,6 +79,26 @@ public class EmployeesRepository : IEmployeesRepository
             return result!;
         }
     }
+
+    public async Task<EmployeeMilitaryInfo> GetEmployeeMilitaryInfoAsync(int employeeId)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
+
+        string query = "GetMilitaryInfo";
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+
+            var militaryInfo = await db.QuerySingleOrDefaultAsync<EmployeeMilitaryInfo>(
+                query,
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return militaryInfo!;
+        }
+    }
+
     #endregion
 
     #region Add
@@ -101,8 +119,8 @@ public class EmployeesRepository : IEmployeesRepository
             parameters.Add("@PhotoUrl", request.PhotoUrl, DbType.String, size: 255);
 
             var query = @"AddEmployee";
-                                        
-            await connection.ExecuteAsync(query, parameters, commandType:CommandType.StoredProcedure);
+
+            await connection.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 
@@ -167,25 +185,51 @@ public class EmployeesRepository : IEmployeesRepository
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+    public async Task UpdateMilitaryInfoAsync(EmployeeMilitaryInfo militaryInfo)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", militaryInfo.Id, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("TicketNumber", militaryInfo.TicketNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("RegistrationGroup", militaryInfo.RegistrationGroup, DbType.String, ParameterDirection.Input);
+        parameters.Add("RegistrationRate", militaryInfo.RegistrationRate, DbType.String, ParameterDirection.Input);
+        parameters.Add("Content", militaryInfo.Content, DbType.String, ParameterDirection.Input);
+        parameters.Add("Rank", militaryInfo.Rank, DbType.String, ParameterDirection.Input);
+        parameters.Add("Period", militaryInfo.Period, DbType.String, ParameterDirection.Input);
+        parameters.Add("Specialization", militaryInfo.Specialization, DbType.String, ParameterDirection.Input);
+        parameters.Add("Number", militaryInfo.Number, DbType.String, ParameterDirection.Input);
+        parameters.Add("Fitness", militaryInfo.Fitness, DbType.String, ParameterDirection.Input);
+        parameters.Add("Commissariat", militaryInfo.Commissariat, DbType.String, ParameterDirection.Input);
+        parameters.Add("SpecialAccountNumber", militaryInfo.SpecialAccountNumber, DbType.String, ParameterDirection.Input);
+
+        string query = "UpdateMilitaryInfo";
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+
+
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
     #endregion
 
     #region Delete
 
-    public async Task DeleteEmployeeAsync(int id) 
+    public async Task DeleteEmployeeAsync(int id)
     {
         var parameters = new DynamicParameters();
 
-        parameters.Add("Id",id, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
 
         var query = @"DeleteEmployee";
 
-        using (var db = new SqlConnection(_connectionString)) 
+        using (var db = new SqlConnection(_connectionString))
         {
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 
-    
+
 
     #endregion
 }

@@ -7,11 +7,15 @@ namespace HumanResourcesWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FamilyMembersController : ControllerBase
+    public class FamilyMembersController(IFamilyMembersRepository repos) : ControllerBase
     {
-        private readonly IFamilyMembersRepository _repos;
-        public FamilyMembersController(IFamilyMembersRepository repos) => _repos = repos;
+        private readonly IFamilyMembersRepository _repos = repos;
 
+        /// <summary>
+        /// Retrieves a list of family members for a specific employee by their ID.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee whose family members are being retrieved.</param>
+        /// <returns>A list of family members associated with the specified employee, or a 404 if none are found.</returns>
         [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetFamilyMembers(int employeeId)
         {
@@ -29,6 +33,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds a new family member for an employee.
+        /// </summary>
+        /// <param name="request">The details of the family member to be added.</param>
+        /// <returns>A success message if the family member is added, or an error if validation fails or a conflict occurs.</returns>
         [HttpPost]
         public async Task<IActionResult> AddFamilyMember([FromForm] AddFamilyMemberRequest request)
         {
@@ -58,6 +67,11 @@ namespace HumanResourcesWebApi.Controllers
 
         }
 
+        /// <summary>
+        /// Updates an existing family member's information.
+        /// </summary>
+        /// <param name="request">The updated family member details.</param>
+        /// <returns>A success message if the update is successful, or an error if validation fails or a conflict occurs.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateFamilyMember([FromForm] UpdateFamilyMemberRequest request) 
         {
@@ -85,6 +99,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a family member by their unique ID.
+        /// </summary>
+        /// <param name="id">The ID of the family member to delete.</param>
+        /// <returns>A success message if the deletion is successful, or an error if a conflict or server error occurs.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFamilyMember(int id)
         {

@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.Requests.PreviousNames;
+﻿using HumanResourcesWebApi.Models.Requests.PreviousNames;
+using HumanResourcesWebApi.Models.Domain;
 
 namespace HumanResourcesWebApi.Abstract;
 

@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Models.DTO;
-using HumanResourcesWebApi.Models.Requests.Reprimands;
+﻿using HumanResourcesWebApi.Models.Requests.Reprimands;
+using HumanResourcesWebApi.Models.DTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

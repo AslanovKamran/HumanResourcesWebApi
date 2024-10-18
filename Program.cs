@@ -1,4 +1,5 @@
 using HumanResourcesWebApi.ServiceExtensions;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen((options) => 
 {
     #region Documentaion Section
+
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "HR API",
+        Version = "v1",
+        Description = "API documentation for HR App"
+    });
+
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
