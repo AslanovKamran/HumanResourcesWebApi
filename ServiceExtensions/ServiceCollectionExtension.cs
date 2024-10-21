@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
         services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
         services.AddScoped<IVacationsRepository, VacationsRepository>(provider => new VacationsRepository(connectionString));
+        services.AddScoped<IHolidaysRepository, HolidaysRepository>(provider => new HolidaysRepository(connectionString));
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
 

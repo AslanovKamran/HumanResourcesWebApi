@@ -1,12 +1,19 @@
 using HumanResourcesWebApi.ServiceExtensions;
+using HumanResourcesWebApi.Common.Converters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Use the custom date-only converter globally
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter()); 
+});
+
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen((options) => 
+builder.Services.AddSwaggerGen((options) =>
 {
     #region Documentaion Section
 
@@ -49,3 +56,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
