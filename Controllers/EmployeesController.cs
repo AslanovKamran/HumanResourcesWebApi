@@ -30,10 +30,7 @@ namespace HumanResourcesWebApi.Controllers
             {
                 var result = await _repos.GetEmployeesChunkAsync(filter, itemsPerPage, currentPage);
 
-                foreach (var item in result.Employees)
-                {
-                    Console.WriteLine($"{item.Surname} {item.Name}");
-                }
+               
 
                 return Ok(new
                 {

@@ -1,7 +1,5 @@
-﻿using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Requests.Vacations;
-using HumanResourcesWebApi.Repository.Dapper;
-using Microsoft.AspNetCore.Http;
+﻿using HumanResourcesWebApi.Models.Requests.WorkNorms;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -9,24 +7,21 @@ namespace HumanResourcesWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VacationsController : ControllerBase
+    public class WorkNormsController(IWorkNormsRepository repos) : ControllerBase
     {
-        private readonly IVacationsRepository _repos;
+        private readonly IWorkNormsRepository _repos = repos;
 
-        public VacationsController(IVacationsRepository repos) => _repos = repos;
-
-
-        [HttpGet("{employeeId}")]
-        public async Task<IActionResult> GetVacations(int employeeId, int? yearStarted = null, int? yearEnded = null)
+        [HttpGet("{year?}")]
+        public async Task<IActionResult> GetWorkNorms(int? year) 
         {
             try
             {
-                var vacations = await _repos.GetVacationsAsync(employeeId, yearStarted, yearEnded);
-                if (vacations == null || vacations.Count == 0)
+                var result = await _repos.GetWorkNormsAsync(year);
+                if (result == null || result.Count ==0)
                 {
-                    return NotFound($"No vacations found for employee ID: {employeeId}");
+                    return NotFound($"No work norms found for the {year ?? DateTime.Now.Year} year");
                 }
-                return Ok(vacations);
+                return Ok(result);
             }
             catch (SqlException ex)
             {
@@ -39,7 +34,7 @@ namespace HumanResourcesWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddVacation([FromForm] AddVacationRequest request)
+        public async Task<IActionResult> AddWorkNorm([FromForm] AddWorkNormRequest request) 
         {
             if (!ModelState.IsValid)
             {
@@ -49,10 +44,11 @@ namespace HumanResourcesWebApi.Controllers
                     errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
                 });
             }
+
             try
             {
-                await _repos.AddVacationAsync(request);
-                return Ok(new { message = "Vacation added successfully." });
+                await _repos.AddWorkNormAsync(request);
+                return Ok(new { message = "Work norm added successfully." });
             }
             catch (SqlException ex)
             {
@@ -60,13 +56,12 @@ namespace HumanResourcesWebApi.Controllers
             }
             catch (Exception ex)
             {
-                // Optional logging here
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateVacation( [FromForm] UpdateVacationRequest request)
+        public async Task<IActionResult> UpdateWorkNorm([FromForm] UpdateWorkNormRequest request) 
         {
             if (!ModelState.IsValid)
             {
@@ -79,8 +74,8 @@ namespace HumanResourcesWebApi.Controllers
 
             try
             {
-                await _repos.UpdateVacationAsync(request);
-                return Ok(new { message = "Vacation updated successfully." });
+                await _repos.UpdateWorkNormAsync(request);
+                return Ok(new { message = "Work norm updated successfully." });
             }
             catch (SqlException ex)
             {
@@ -93,12 +88,13 @@ namespace HumanResourcesWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteVacation(int id)
+        public async Task<IActionResult> DeleteWorkNorm(int id)
         {
+           
             try
             {
-                await _repos.DeleteVacationAsync(id);
-                return Ok(new { message = "Vacation deleted successfully." });
+                await _repos.DeleteWorkNormAsync(id);
+                return Ok(new { message = "Work norm deleted successfully." });
             }
             catch (SqlException ex)
             {
@@ -109,5 +105,7 @@ namespace HumanResourcesWebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
             }
         }
+
+
     }
 }

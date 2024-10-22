@@ -1,6 +1,6 @@
 ﻿namespace HumanResourcesWebApi.Models.Domain;
 
-public class UpdateEducationRequest
+public class Education
 {
     public int Id { get; set; }
     public string? Speciality{ get; set; }

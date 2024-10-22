@@ -12,12 +12,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityCardsRepository, IdentityCardsRepository>(provider => new IdentityCardsRepository(connectionString));
         services.AddScoped<IFamilyMembersRepository, FamilyMembersRepository>(provider => new FamilyMembersRepository(connectionString));
         services.AddScoped<IPreviousNamesRepository, PreviousNamesRepository>(provider => new PreviousNamesRepository(connectionString));
+        services.AddScoped<IVacationTypesRepository, VacationTypesRepository>(provider => new VacationTypesRepository(connectionString));
         services.AddScoped<ICertificatesRepository, CertificatesRepositoty>(provider => new CertificatesRepositoty(connectionString));
         services.AddScoped<IStateTablesRepository, StateTablesRepository>(provider => new StateTablesRepository(connectionString));
         services.AddScoped<IReprimandsRepository, ReprimandsRepository>(provider => new ReprimandsRepository(connectionString));
         services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
         services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
         services.AddScoped<IVacationsRepository, VacationsRepository>(provider => new VacationsRepository(connectionString));
+        services.AddScoped<IWorkNormsRepository, WorkNormsRepository>(provider => new WorkNormsRepository(connectionString));
         services.AddScoped<IHolidaysRepository, HolidaysRepository>(provider => new HolidaysRepository(connectionString));
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));

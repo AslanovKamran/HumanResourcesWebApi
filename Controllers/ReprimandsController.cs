@@ -1,11 +1,11 @@
-﻿using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Requests.Reprimands;
-using HumanResourcesWebApi.Repository.Dapper;
-using Microsoft.AspNetCore.Http;
+﻿using HumanResourcesWebApi.Models.Requests.Reprimands;
+using HumanResourcesWebApi.Abstract;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace HumanResourcesWebApi.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
     public class ReprimandsController : ControllerBase
@@ -13,6 +13,12 @@ namespace HumanResourcesWebApi.Controllers
         private readonly IReprimandsRepository _repos;
         public ReprimandsController(IReprimandsRepository repos) => _repos = repos;
 
+
+        /// <summary>
+        /// Retrieves a list of family members for a given employee.
+        /// </summary>
+        /// <param name="employeeId">The ID of the employee.</param>
+        /// <returns>Returns a list of family members.</returns>
         [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetReprimands(int employeeId)
         {
@@ -29,6 +35,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds a new family member for an employee.
+        /// </summary>
+        /// <param name="request">The request containing family member details.</param>
+        /// <returns>Returns success message on successful creation.</returns>
         [HttpPost]
         public async Task<IActionResult> AddReprimand([FromForm] AddReprimandRequest request)
         {
@@ -52,6 +63,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing family member's details for an employee.
+        /// </summary>
+        /// <param name="request">The request containing updated family member details.</param>
+        /// <returns>Returns success message on successful update.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateReprimand([FromForm] UpdateReprimandRequest request)
         {
@@ -75,6 +91,11 @@ namespace HumanResourcesWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a family member for an employee.
+        /// </summary>
+        /// <param name="id">The ID of the family member to delete.</param>
+        /// <returns>Returns success message on successful deletion.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReprimand(int id)
         {
