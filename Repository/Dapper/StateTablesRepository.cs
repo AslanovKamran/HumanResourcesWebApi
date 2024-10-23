@@ -23,7 +23,7 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
         parameters.Add("Skip", skip, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Take", take, DbType.Int32, ParameterDirection.Input);
 
-        string query = @"GetStateTablesWithCount @ShowOnlyActive, @Skip, @Take";
+        var query = @"GetStateTablesWithCount @ShowOnlyActive, @Skip, @Take";
 
         using (IDbConnection db = new SqlConnection(_connectionString))
         {

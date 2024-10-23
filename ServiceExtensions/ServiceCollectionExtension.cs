@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomRepositories(this IServiceCollection services, string connectionString)
     {
         services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
+        services.AddScoped<IGeneralInformationRepository, GeneralInformationRepository>(provider => new GeneralInformationRepository(connectionString));
         services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
         services.AddScoped<IIdentityCardsRepository, IdentityCardsRepository>(provider => new IdentityCardsRepository(connectionString));
         services.AddScoped<IFamilyMembersRepository, FamilyMembersRepository>(provider => new FamilyMembersRepository(connectionString));
@@ -19,10 +20,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
         services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
         services.AddScoped<IVacationsRepository, VacationsRepository>(provider => new VacationsRepository(connectionString));
+        services.AddScoped<ICountriesRepository, CountriesRepository>(provider => new CountriesRepository(connectionString));
         services.AddScoped<IWorkNormsRepository, WorkNormsRepository>(provider => new WorkNormsRepository(connectionString));
         services.AddScoped<IHolidaysRepository, HolidaysRepository>(provider => new HolidaysRepository(connectionString));
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
+        services.AddScoped<ICitiesRepository, CitiesRepository>(provider => new CitiesRepository(connectionString));
 
         return services;
     }

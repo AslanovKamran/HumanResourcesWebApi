@@ -1,9 +1,9 @@
-﻿using HumanResourcesWebApi.Common.Mapper;
+﻿using HumanResourcesWebApi.Models.Requests.StateTables;
+using HumanResourcesWebApi.Common.Mapper;
 using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
-using HumanResourcesWebApi.Models.Requests.StateTables;
 
 namespace HumanResourcesWebApi.Controllers;
 
@@ -26,7 +26,11 @@ public class StateTablesController : ControllerBase
             {
                 result.Add(StateTable_StateTableDtoMapper.MapDto(stateTable));
             }
-            return Ok(new { StateTables = result, PageInfo = pageInfo });
+            return Ok(new
+            {
+                StateTables = result,
+                PageInfo = pageInfo
+            });
         }
 
         catch (SqlException ex)
@@ -118,7 +122,7 @@ public class StateTablesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStateTable(int id) 
+    public async Task<IActionResult> DeleteStateTable(int id)
     {
         try
         {
