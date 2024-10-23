@@ -1,6 +1,6 @@
 ﻿using HumanResourcesWebApi.Common.Calculations;
 
-namespace HumanResourcesWebApi.Models.DTO
+namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO
 {
     public class EmployeesChunk
     {
@@ -16,7 +16,7 @@ namespace HumanResourcesWebApi.Models.DTO
         public string? TabelNumber { get; set; } // Nullable
         public DateTime? EntryDate { get; set; }  // Not nullable, assuming it's required
 
-        public DateTime? QuitDate{ get; set; }  // Not nullable, assuming it's required
+        public DateTime? QuitDate { get; set; }  // Not nullable, assuming it's required
         public int? TrainershipYear { get; set; } // Nullable
         public int? TrainershipMonth { get; set; } // Nullable
         public int? TrainershipDay { get; set; } // Nullable

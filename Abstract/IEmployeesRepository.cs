@@ -2,7 +2,7 @@
 using HumanResourcesWebApi.Models.Requests.Employees;
 using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.DTO;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

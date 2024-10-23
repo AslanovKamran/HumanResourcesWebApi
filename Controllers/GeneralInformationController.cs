@@ -1,6 +1,5 @@
-﻿using Azure.Core;
+﻿using HumanResourcesWebApi.Models.Requests.GeneralInformation;
 using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Requests.GeneralInformation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -11,6 +10,15 @@ namespace HumanResourcesWebApi.Controllers;
 public class GeneralInformationController(IGeneralInformationRepository repos) : ControllerBase
 {
     private readonly IGeneralInformationRepository _repos = repos;
+
+    #region Get
+
+    /// <summary>
+    /// Retrieves the list of general information records.
+    /// </summary>
+    /// <returns>
+    /// A list of general information records if available, otherwise a 404 Not Found response.
+    /// </returns>
 
     [HttpGet]
     public async Task<IActionResult> GetGeneralInformation()
@@ -32,11 +40,22 @@ public class GeneralInformationController(IGeneralInformationRepository repos) :
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
         }
     }
+    #endregion
 
+    #region Update
+    
+    /// <summary>
+    /// Updates an existing general information record.
+    /// </summary>
+    /// <param name="request">The request object containing updated general information.</param>
+    /// <returns>
+    /// A success message if the update is successful, or a validation error or server error response.
+    /// </returns>
+    
     [HttpPut]
     public async Task<IActionResult> UpdateGeneralInformation([FromForm] UpdateGeneralInformationRequest request)
     {
-        if (!ModelState.IsValid) 
+        if (!ModelState.IsValid)
         {
             return BadRequest(new
             {
@@ -59,4 +78,7 @@ public class GeneralInformationController(IGeneralInformationRepository repos) :
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
         }
     }
+
+    #endregion
+
 }

@@ -1,9 +1,9 @@
 ﻿using HumanResourcesWebApi.Models.Requests.Vacations;
-using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -24,8 +24,8 @@ public class VacationsRepository(string connectionString) : IVacationsRepository
 
         using (var db = new SqlConnection(_connectionString))
         {
-            var result = (await db.QueryAsync<EmployeeVacation>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
-            return result;
+            var result = (await db.QueryAsync<EmployeeVacation>(query, parameters, commandType: CommandType.StoredProcedure));
+            return result.AsList();
         }
     }
 

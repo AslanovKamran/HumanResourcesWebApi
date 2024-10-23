@@ -39,7 +39,7 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
                         stateTable.StateWorkType = type;
                         return stateTable;
                     }
-                ).ToList();
+                ).AsList();
 
                 var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
 
@@ -66,7 +66,7 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
                     return stateTable;
                 },
                 parameters
-            )).ToList();
+            )).AsList();
 
             return result;
         }
@@ -103,7 +103,6 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
 
         using (IDbConnection db = new SqlConnection(_connectionString))
         {
-
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -139,7 +138,6 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
 
         using (IDbConnection db = new SqlConnection(_connectionString))
         {
-
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
@@ -155,8 +153,7 @@ public class StateTablesRepository(string connectionString) : IStateTablesReposi
 
         using (IDbConnection db = new SqlConnection(_connectionString))
         {
-
-            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure); // Execute without expecting a result
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure); 
         }
     }
 

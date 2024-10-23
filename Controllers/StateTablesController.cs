@@ -9,12 +9,22 @@ namespace HumanResourcesWebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class StateTablesController : ControllerBase
+public class StateTablesController(IStateTablesRepository repos) : ControllerBase
 {
-    private readonly IStateTablesRepository _repos;
+    private readonly IStateTablesRepository _repos = repos;
 
-    public StateTablesController(IStateTablesRepository repos) => _repos = repos;
+    #region Get
 
+    /// <summary>
+    /// Retrieves a paginated list of state tables.
+    /// </summary>
+    /// <param name="itemsPerPage">The number of state tables per page.</param>
+    /// <param name="currentPage">The current page number.</param>
+    /// <param name="showOnlyActive">Specifies whether to show only active state tables.</param>
+    /// <returns>
+    /// A list of state tables with pagination information.
+    /// </returns>
+   
     [HttpGet]
     public async Task<IActionResult> GetStateTables(int itemsPerPage = 30, int currentPage = 1, bool showOnlyActive = true)
     {
@@ -45,6 +55,15 @@ public class StateTablesController : ControllerBase
 
     }
 
+    /// <summary>
+    /// Retrieves a list of state tables for a specific organization.
+    /// </summary>
+    /// <param name="organizationId">The ID of the organization.</param>
+    /// <param name="showOnlyActive">Specifies whether to show only active state tables for the organization.</param>
+    /// <returns>
+    /// A list of state tables for the specified organization.
+    /// </returns>
+    
     [HttpGet("{organizationId}")]
     public async Task<IActionResult> GetStateTablesByOrganization(int organizationId, [FromQuery] bool showOnlyActive = true)
     {
@@ -70,6 +89,18 @@ public class StateTablesController : ControllerBase
         }
     }
 
+    #endregion
+
+    #region Add
+    
+    /// <summary>
+    /// Adds a new state table.
+    /// </summary>
+    /// <param name="request">The request object containing the details of the state table to add.</param>
+    /// <returns>
+    /// A message indicating the success of the operation or an error response.
+    /// </returns>
+
     [HttpPost]
     public async Task<IActionResult> AddStateTable([FromForm] AddStateTableRequest request)
     {
@@ -93,6 +124,19 @@ public class StateTablesController : ControllerBase
         }
     }
 
+    #endregion
+
+    #region Update
+
+    /// <summary>
+    /// Updates an existing state table.
+    /// </summary>
+    /// <param name="request">The request object containing the updated state table details.</param>
+    /// <returns>
+    /// A message indicating the success of the update operation or an error response.
+    /// </returns>
+    /// 
+    
     [HttpPut]
     public async Task<IActionResult> UpdateStateTable([FromForm] UpdateStateTableRequest request)
     {
@@ -121,6 +165,18 @@ public class StateTablesController : ControllerBase
         }
     }
 
+    #endregion
+
+    #region Delete
+
+    /// <summary>
+    /// Deletes (marks as canceled) a state table by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the state table to delete.</param>
+    /// <returns>
+    /// A message indicating the success of the deletion or an error response.
+    /// </returns>
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStateTable(int id)
     {
@@ -139,4 +195,7 @@ public class StateTablesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { Message = $"An error occurred: {ex.Message}" });
         }
     }
+
+    #endregion
+
 }

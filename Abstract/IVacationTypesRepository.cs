@@ -5,7 +5,7 @@ namespace HumanResourcesWebApi.Abstract;
 
 public interface IVacationTypesRepository
 {
-    Task<List<VacationType>> GetVacationTypesAsync();
+    Task<List<VacationTypeDTO>> GetVacationTypesAsync();
 
     Task AddVacationAsync(AddVacationTypeRequest request);
     Task UpdateVacationAsync(UpdateVacationTypeRequest request);

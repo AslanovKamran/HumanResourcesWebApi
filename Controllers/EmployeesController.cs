@@ -1,11 +1,10 @@
 ﻿using HumanResourcesWebApi.Models.Requests.PoliticalParties;
 using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-
-using HumanResourcesWebApi.Models.DTO;
 
 namespace HumanResourcesWebApi.Controllers;
 
@@ -16,6 +15,7 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     private readonly IEmployeesRepository _repos = repos;
 
     #region Get
+    
     /// <summary>
     /// Retrieves a paginated list of employees based on the provided filter, items per page, and current page.
     /// </summary>
@@ -23,6 +23,7 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     /// <param name="itemsPerPage">Number of items to retrieve per page.</param>
     /// <param name="currentPage">The current page number.</param>
     /// <returns>A paginated list of employees along with page info, or an error if the request fails.</returns>
+   
     [HttpGet]
     public async Task<IActionResult> GetChunk([FromQuery] EmployeeFilter filter, [FromQuery] int itemsPerPage = 10, [FromQuery] int currentPage = 1)
     {
@@ -119,13 +120,14 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
 
     #endregion
 
-    #region Post
+    #region Add
 
     /// <summary>
     /// Adds a new employee to the database.
     /// </summary>
     /// <param name="request">Details of the employee to be added.</param>
     /// <returns>A success message if the employee is added, or an error if validation fails or a conflict occurs.</returns>
+   
     [HttpPost]
     public async Task<IActionResult> AddEmployee([FromForm] AddEmployeeRequest request)
     {
@@ -148,13 +150,14 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
 
     #endregion
 
-    #region Put
+    #region Update
 
     /// <summary>
     /// Updates the general information for an existing employee.
     /// </summary>
     /// <param name="request">The updated employee information.</param>
     /// <returns>A success message if the update is successful, or an error if validation fails or a conflict occurs.</returns>
+   
     [HttpPut("updateInfo")]
     public async Task<IActionResult> UpdateEmployeeGeneralInfo([FromForm] UpdateEmployeeGeneralInfoRequest request)
     {
@@ -181,6 +184,7 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     /// </summary>
     /// <param name="request">The updated political party details.</param>
     /// <returns>A success message if the update is successful, or an error if validation fails or a conflict occurs.</returns>
+  
     [HttpPut("politicalparty")]
     public async Task<IActionResult> UpdatePoliticalParty([FromForm] UpdatePoliticalPartyRequest request)
     {
@@ -210,6 +214,7 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     /// </summary>
     /// <param name="militaryInfo">The updated military information details.</param>
     /// <returns>A success message if the update is successful, or an error if validation fails or a conflict occurs.</returns>
+   
     [HttpPut("militaryInfo")]
     public async Task<IActionResult> UpdateMilitaryInfo([FromForm] EmployeeMilitaryInfo militaryInfo)
     {
@@ -245,6 +250,7 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     /// </summary>
     /// <param name="id">The ID of the employee to be deleted.</param>
     /// <returns>A success message if the deletion is successful, or an error if a database or server issue occurs.</returns>
+   
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployee(int id)
     {

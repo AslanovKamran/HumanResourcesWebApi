@@ -1,4 +1,4 @@
-﻿namespace HumanResourcesWebApi.Models.DTO
+﻿namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO
 {
     public class EmployeeEducation
     {

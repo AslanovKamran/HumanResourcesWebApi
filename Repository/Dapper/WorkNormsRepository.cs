@@ -12,7 +12,7 @@ namespace HumanResourcesWebApi.Repository.Dapper
         private readonly string _connectionString = connectionString;
 
         #region Get
-        public async Task<List<WorkNorm>> GetWorkNormsAsync(int? year)
+        public async Task<List<WorkNormDTO>> GetWorkNormsAsync(int? year)
         {
             year ??= DateTime.Now.Year;
 
@@ -23,7 +23,7 @@ namespace HumanResourcesWebApi.Repository.Dapper
 
             using (var db = new SqlConnection(_connectionString))
             {
-                var result = await db.QueryAsync<WorkNorm>(query, parameters, commandType: CommandType.StoredProcedure);
+                var result = await db.QueryAsync<WorkNormDTO>(query, parameters, commandType: CommandType.StoredProcedure);
                 return result.AsList();
             }
         }

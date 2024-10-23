@@ -11,8 +11,18 @@ public class CountriesController(ICountriesRepository repos) : ControllerBase
 {
     private readonly ICountriesRepository _repos = repos;
 
+    #region Get
+
+    /// <summary>
+    /// Retrieves a list of all countries.
+    /// </summary>
+    /// <returns>
+    /// A list of countries.
+    /// </returns>
+    
     [HttpGet]
-    public async Task<IActionResult> GetCountries() 
+
+    public async Task<IActionResult> GetCountries()
     {
         try
         {
@@ -29,6 +39,18 @@ public class CountriesController(ICountriesRepository repos) : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
         }
     }
+
+    #endregion
+
+    #region Add
+
+    /// <summary>
+    /// Adds a new country.
+    /// </summary>
+    /// <param name="request">The request object containing the details of the new country.</param>
+    /// <returns>
+    /// A success message if the country is added, or a validation error or server error response.
+    /// </returns>
 
     [HttpPost]
     public async Task<IActionResult> AddCountry([FromForm] AddCountryRequest request)
@@ -60,6 +82,17 @@ public class CountriesController(ICountriesRepository repos) : ControllerBase
         }
     }
 
+    #endregion
+
+    #region Update
+
+    /// <summary>
+    /// Updates an existing country.
+    /// </summary>
+    /// <param name="request">The request object containing the updated country details.</param>
+    /// <returns>
+    /// A success message if the country is updated, or a validation error or server error response.
+    /// </returns>
 
     [HttpPut]
     public async Task<IActionResult> UpdateCity([FromForm] UpdateCountryRequest request)
@@ -91,6 +124,18 @@ public class CountriesController(ICountriesRepository repos) : ControllerBase
         }
     }
 
+    #endregion
+
+    #region Delete
+
+    /// <summary>
+    /// Deletes a country by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the country to be deleted.</param>
+    /// <returns>
+    /// A success message if the country is deleted, or a conflict or server error response.
+    /// </returns>
+
     [HttpDelete]
     public async Task<IActionResult> DeleteCountry(int id)
     {
@@ -108,4 +153,7 @@ public class CountriesController(ICountriesRepository repos) : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
         }
     }
+
+    #endregion
+
 }

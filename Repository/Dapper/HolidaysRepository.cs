@@ -14,7 +14,7 @@ public class HolidaysRepository(string connectionString) : IHolidaysRepository
     #region Get
     public async Task<List<HolidayDTO>> GetHolidaysAsync(int? year)
     {
-        year = year ?? DateTime.Now.Year;
+        year ??= DateTime.Now.Year;
 
         var parameters = new DynamicParameters();
         parameters.Add("Date", year, DbType.Int32, ParameterDirection.Input);

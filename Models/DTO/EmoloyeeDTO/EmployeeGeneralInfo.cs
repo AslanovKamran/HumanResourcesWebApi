@@ -1,6 +1,6 @@
 ﻿using HumanResourcesWebApi.Common.Calculations;
 
-namespace HumanResourcesWebApi.Models.DTO;
+namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 public class EmployeeGeneralInfoDto
 {
@@ -68,7 +68,7 @@ public class EmployeeGeneralInfoDto
 
 
     // Method to calculate PreviousExperience based on Trainership data
-   
+
 
 
 

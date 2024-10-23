@@ -1,6 +1,6 @@
 ﻿namespace HumanResourcesWebApi.Models.DTO;
 
-public class WorkNorm
+public class WorkNormDTO
 {
     public int Id { get; set; }
     public int Year { get; set; }

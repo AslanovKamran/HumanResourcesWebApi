@@ -5,7 +5,7 @@ namespace HumanResourcesWebApi.Abstract;
 
 public interface IWorkNormsRepository
 {
-    public Task<List<WorkNorm>> GetWorkNormsAsync(int? year);
+    public Task<List<WorkNormDTO>> GetWorkNormsAsync(int? year);
     public Task AddWorkNormAsync(AddWorkNormRequest request);
     public Task UpdateWorkNormAsync(UpdateWorkNormRequest request);
     public Task DeleteWorkNormAsync(int year);

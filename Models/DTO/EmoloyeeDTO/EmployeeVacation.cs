@@ -1,4 +1,4 @@
-﻿namespace HumanResourcesWebApi.Models.DTO;
+﻿namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 public class EmployeeVacation
 {
@@ -7,6 +7,6 @@ public class EmployeeVacation
     public int? YearEnded { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Type { get; set; }
-    public int DaysTotal{ get; set; }
-    public int DaysWorking{ get; set; }
+    public int DaysTotal { get; set; }
+    public int DaysWorking { get; set; }
 }

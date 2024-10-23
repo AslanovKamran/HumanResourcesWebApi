@@ -1,4 +1,4 @@
-﻿namespace HumanResourcesWebApi.Models.DTO;
+﻿namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 public class EmployeeFamilyMember
 {
@@ -8,5 +8,5 @@ public class EmployeeFamilyMember
     public string Surname { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string FatherName { get; set; } = string.Empty;
-    public int EmployeeId{ get; set; } 
+    public int EmployeeId { get; set; }
 }

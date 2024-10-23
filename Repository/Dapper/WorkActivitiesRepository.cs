@@ -1,9 +1,9 @@
 ﻿using HumanResourcesWebApi.Models.Requests.WorkActivities;
-using HumanResourcesWebApi.Models.DTO;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -22,8 +22,8 @@ public class WorkActivitiesRepository(string connectionString) : IWorkActivities
 
         using (var db = new SqlConnection(_connectionString))
         {
-            var result = (await db.QueryAsync<EmployeeWorkActivity>(query, parameters, commandType: CommandType.StoredProcedure)).ToList();
-            return result;
+            var result = (await db.QueryAsync<EmployeeWorkActivity>(query, parameters, commandType: CommandType.StoredProcedure));
+            return result.AsList();
         }
     }
 
@@ -90,7 +90,6 @@ public class WorkActivitiesRepository(string connectionString) : IWorkActivities
 
         using (var db = new SqlConnection(_connectionString))
         {
-
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }

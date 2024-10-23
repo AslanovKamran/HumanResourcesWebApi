@@ -12,16 +12,15 @@ public class VacationTypesRepository(string connectionString) : IVacationTypesRe
 
     private readonly string _connectionString = connectionString;
 
-
     #region Get
 
-    public async Task<List<VacationType>> GetVacationTypesAsync()
+    public async Task<List<VacationTypeDTO>> GetVacationTypesAsync()
     {
         var query = @"GetVacationTypes";
 
         using (var db = new SqlConnection(_connectionString))
         {
-            var result = await db.QueryAsync<VacationType>(query,commandType:CommandType.StoredProcedure);
+            var result = await db.QueryAsync<VacationTypeDTO>(query,commandType:CommandType.StoredProcedure);
             return result.AsList();
         }
     }

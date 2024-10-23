@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    // Use the custom date-only converter globally
     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter()); 
 });
 
