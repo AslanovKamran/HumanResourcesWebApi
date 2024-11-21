@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFamilyMembersRepository, FamilyMembersRepository>(provider => new FamilyMembersRepository(connectionString));
         services.AddScoped<IPreviousNamesRepository, PreviousNamesRepository>(provider => new PreviousNamesRepository(connectionString));
         services.AddScoped<IVacationTypesRepository, VacationTypesRepository>(provider => new VacationTypesRepository(connectionString));
+        services.AddScoped<IBusinessTripsRepository, BusinessTripsRepository>(provider => new BusinessTripsRepository(connectionString));
         services.AddScoped<ICertificatesRepository, CertificatesRepositoty>(provider => new CertificatesRepositoty(connectionString));
         services.AddScoped<IStateTablesRepository, StateTablesRepository>(provider => new StateTablesRepository(connectionString));
         services.AddScoped<IReprimandsRepository, ReprimandsRepository>(provider => new ReprimandsRepository(connectionString));
