@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HumanResourcesWebApi.Models.Requests.Employees;
 
@@ -33,6 +34,9 @@ public class AddEmployeeRequest
 
     [Url(ErrorMessage = "Please enter a valid URL.")]
     public string? PhotoUrl { get; set; }  // Optional URL for the photo
+
+    [JsonIgnore]
+    public IFormFile? ImageFile { get; set; }
 }
 
 

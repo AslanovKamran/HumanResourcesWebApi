@@ -41,6 +41,8 @@ app.UseSwaggerUI(c =>
     c.DisplayRequestDuration();
 });
 
+app.UseStaticFiles();
+
 app.UseCors(options =>
 {
     options.AllowAnyMethod();
