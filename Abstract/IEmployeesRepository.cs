@@ -1,8 +1,8 @@
 ﻿using HumanResourcesWebApi.Models.Requests.PoliticalParties;
 using HumanResourcesWebApi.Models.Requests.Employees;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 using HumanResourcesWebApi.Common.Filters;
 using HumanResourcesWebApi.Models.Domain;
-using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 namespace HumanResourcesWebApi.Abstract;
 

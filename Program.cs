@@ -36,6 +36,7 @@ builder.Services.AddCustomRepositories(connectionString!);
 var app = builder.Build();
 
 app.UseSwagger();
+
 app.UseSwaggerUI(c =>
 {
     c.DisplayRequestDuration();
@@ -57,4 +58,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

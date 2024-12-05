@@ -32,18 +32,21 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
         try
         {
             var result = await _repos.GetEmployeesChunkAsync(filter, itemsPerPage, currentPage);
-
-
-
             return Ok(new
             {
                 Data = result.Employees,
                 PageInfo = result.PageInfo
             });
         }
+        catch (SqlException ex)
+        {
+            // Handle database-related exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "A database error occurred.", details = ex.Message });
+        }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            // Handle any other unexpected exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
         }
     }
 
@@ -139,8 +142,11 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
         string photoUrl = string.Empty;
         try
         {
-            request.PhotoUrl = FileUploader.UploadFile(request.ImageFile!);
-            photoUrl = request.PhotoUrl;
+            if (request.ImageFile is not null)
+            {
+                request.PhotoUrl = FileUploader.UploadFile(request.ImageFile!);
+                photoUrl = request.PhotoUrl;
+            }
             await _repos.AddEmployeeAsync(request);
 
             return Ok(new { message = "Employee added successfully." });

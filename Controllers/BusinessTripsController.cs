@@ -40,13 +40,17 @@ public class BusinessTripsController(IBusinessTripsRepository repos) : Controlle
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetBusinessTrips()
+    public async Task<IActionResult> GetBusinessTrips([FromQuery] int itemsPerPage = 20, [FromQuery] int currentPage = 1)
     {
+
         try
         {
-            // Call the repository method to get business trip details
-            var businessTrips = await _repos.GetBusinessTrips();
-            return Ok(businessTrips);
+            var result = await _repos.GetBusinessTrips(itemsPerPage, currentPage);
+            return Ok(new
+            {
+                Data = result.BusinessTrips,
+                PageInfo = result.PageInfo
+            });
         }
         catch (SqlException ex)
         {

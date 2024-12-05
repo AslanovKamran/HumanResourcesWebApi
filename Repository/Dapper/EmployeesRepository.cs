@@ -61,7 +61,7 @@ public class EmployeesRepository(string connectionString) : IEmployeesRepository
 
         using (var db = new SqlConnection(_connectionString))
         {
-            var query = "GetUserGeneralInfo";
+            var query = "GetEmployeeGeneralInfo";
             var employee = await db.QueryFirstOrDefaultAsync<EmployeeGeneralInfoDto>(query, parameters, commandType: CommandType.StoredProcedure);
             return employee!;
         }
