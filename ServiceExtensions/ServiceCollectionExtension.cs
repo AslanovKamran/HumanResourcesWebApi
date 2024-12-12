@@ -28,6 +28,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
         services.AddScoped<ICitiesRepository, CitiesRepository>(provider => new CitiesRepository(connectionString));
 
+        services.AddScoped<ITabelVacationRepository, TabelVacationRepository>(provider => new TabelVacationRepository(connectionString));
+        services.AddScoped<ITabelAbsentRepository, TabelAbsentRepository>(provider => new TabelAbsentRepository(connectionString));
+        services.AddScoped<ITabelBulletinRepository, TabelBulletinRepository>(provider => new TabelBulletinRepository(connectionString));
+        services.AddScoped<ITabelExtraWorkRepository, TabelExtraWorkRepository>(provider => new TabelExtraWorkRepository(connectionString));
+        services.AddScoped<ISubstitutesRepository, SubstitutesRepository>(provider => new SubstitutesRepository(connectionString));
+
         return services;
     }
 }
