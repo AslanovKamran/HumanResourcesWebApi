@@ -2,6 +2,8 @@ using HumanResourcesWebApi.ServiceExtensions;
 using HumanResourcesWebApi.Common.Converters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using HumanResourcesWebApi.Abstract;
+using HumanResourcesWebApi.Repository.Dapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,9 +31,20 @@ builder.Services.AddSwaggerGen((options) =>
     #endregion
 });
 
-var connectionString = builder.Configuration.GetConnectionString("Network");
 
+#region Anviz ConnectionString
+
+var anvizConnectionString = builder.Configuration.GetConnectionString("AnvizConnectionString");
+builder.Services.AddScoped<IAnvizRepository, AnvizRepository>(provider => new AnvizRepository(anvizConnectionString!));
+
+#endregion
+
+#region Services Section
+
+var connectionString = builder.Configuration.GetConnectionString("Network");
 builder.Services.AddCustomRepositories(connectionString!);
+
+#endregion
 
 var app = builder.Build();
 

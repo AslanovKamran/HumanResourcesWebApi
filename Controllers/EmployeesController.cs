@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using HumanResourcesWebApi.Common.FileUploader;
 using HumanResourcesWebApi.Common.FileEraser;
+using HumanResourcesWebApi.Repository.Dapper;
 
 namespace HumanResourcesWebApi.Controllers;
 
@@ -256,7 +257,57 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Update Employee's photo By Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newImage"></param>
+    /// <returns></returns>
+
+    [HttpPut("photo")]
+    public async Task<IActionResult> UpdatePhotoUrl(int id, IFormFile newImage)
+    {
+        string newPhotoName = string.Empty;
+        bool success = false;
+
+        try
+        {
+            // Upload the new file
+            newPhotoName = FileUploader.UploadFile(newImage);
+
+            // Update the database and get the old photo URL
+            var oldPhotoName = await _repos.UpdateEmployeePhotoAsync(id, newPhotoName);
+
+            // Delete the old photo
+            if (!string.IsNullOrEmpty(oldPhotoName))
+            {
+                FileEraser.DeleteImage(oldPhotoName);
+            }
+            success = true; // Mark as successful
+            return Ok(new { Success = success, Message = "Photo updated successfully." });
+        }
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
+        }
+        finally
+        {
+            // Cleanup the uploaded file if the operation was not successful
+            if (!success && !string.IsNullOrEmpty(newPhotoName))
+            {
+                FileEraser.DeleteImage(newPhotoName);
+            }
+        }
+    }
+
     #endregion
+
+
 
     #region Delete
 

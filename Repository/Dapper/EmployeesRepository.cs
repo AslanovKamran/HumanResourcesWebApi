@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
 
+
 namespace HumanResourcesWebApi.Repository.Dapper;
 
 public class EmployeesRepository(string connectionString) : IEmployeesRepository
@@ -208,6 +209,24 @@ public class EmployeesRepository(string connectionString) : IEmployeesRepository
 
 
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    public async Task<string> UpdateEmployeePhotoAsync(int id, string newPhotoUrl)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("NewPhotoUrl", newPhotoUrl, DbType.String, ParameterDirection.Input, size: 255); // Explicit size for input
+        parameters.Add("OldPhotoUrl", dbType: DbType.String, direction: ParameterDirection.Output, size: 255); // Explicit size for output
+
+        var query = "UpdateEmployeesPhotoUrl";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+
+            // Retrieve the output parameter value
+            return parameters.Get<string>("OldPhotoUrl");
         }
     }
 

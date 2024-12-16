@@ -27,6 +27,9 @@ public interface IEmployeesRepository
     Task UpdatePoliticalPartyAsync(UpdatePoliticalPartyRequest request);
     Task UpdateMilitaryInfoAsync(EmployeeMilitaryInfo militaryInfo);
 
+    //Return the old photoUrl in order to delete it when update is performed
+    Task<string> UpdateEmployeePhotoAsync(int id, string newPhotoUrl);
+
     #endregion
 
     #region Delete
