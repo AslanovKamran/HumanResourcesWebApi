@@ -5,9 +5,7 @@ namespace HumanResourcesWebApi.Models.Requests.Employees;
 
 public class AddEmployeeRequest
 {
-    [Required]
-    public int Id { get; set; }
-
+    
     [Required(AllowEmptyStrings = false)]
     [StringLength(100, ErrorMessage = "Surname can't be longer than 100 characters.")]
     public string Surname { get; set; } = string.Empty;

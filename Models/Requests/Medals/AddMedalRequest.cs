@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace HumanResourcesWebApi.Models.Requests.Medals;
 public class AddMedalRequest
 {
-    [Required]
-    public int Id { get; set; }
+  
 
     [DataType(DataType.Date)]
     public DateTime? OrderDate { get; set; }

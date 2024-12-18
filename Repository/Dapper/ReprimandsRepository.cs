@@ -33,7 +33,7 @@ public class ReprimandsRepository(string connectionString) : IReprimandsReposito
     public async Task AddReprimandAsync(AddReprimandRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+     
         parameters.Add("IssuedAt", request.IssuedAt, DbType.Date, ParameterDirection.Input);
         parameters.Add("TakenAt", request.TakenAt ?? null, DbType.Date, ParameterDirection.Input);
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);

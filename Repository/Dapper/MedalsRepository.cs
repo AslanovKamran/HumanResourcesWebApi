@@ -31,7 +31,7 @@ public class MedalsRepository(string connectionString) : IMedalsRepository
     public async Task AddMedalAsync(AddMedalRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+      
         parameters.Add("OrderDate", request.OrderDate, DbType.Date, ParameterDirection.Input);
         parameters.Add("OrderNumber", request.OrderNumber, DbType.String, ParameterDirection.Input);
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);

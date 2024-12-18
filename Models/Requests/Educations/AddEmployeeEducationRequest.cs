@@ -4,8 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.Educations;
 
 public class AddEmployeeEducationRequest
 {
-    [Required]
-    public int Id { get; set; }
+   
 
     [Required]
     public int EducationTypeId { get; set; }

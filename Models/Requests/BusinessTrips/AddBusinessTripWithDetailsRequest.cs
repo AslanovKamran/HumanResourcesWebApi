@@ -4,10 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.BusinessTrips;
 
 public class AddBusinessTripWithDetailsRequest
 {
-    [Key]
-    [Required]
-    public int Id { get; set; }
-
+  
     [Required(AllowEmptyStrings = false)]
     [StringLength(255)]
     public string Purpose { get; set; } = string.Empty;

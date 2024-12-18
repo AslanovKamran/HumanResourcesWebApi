@@ -2,7 +2,6 @@
 
 public class AddSubstituteRequest
 {
-    public int Id { get; set; }
     public int WhoId { get; set; }
     public int WhomId { get; set; }
     public int? TabelVacationId { get; set; }

@@ -32,8 +32,6 @@ public class EducationRepository(string connectionString) : IEducationRepository
     {
         var parameters = new DynamicParameters();
 
-
-        parameters.Add("Id", education.Id, DbType.Int32, ParameterDirection.Input);
         parameters.Add("EducationTypeId", education.EducationTypeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Institution", education.Institution, DbType.String, ParameterDirection.Input);
         parameters.Add("Speciality", education.Speciality, DbType.String, ParameterDirection.Input);

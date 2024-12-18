@@ -41,7 +41,7 @@ public class TabelBulletinRepository : ITabelBulletinRepository
     public async Task AddTabelBulletinAsync(AddTabelBulletinRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+      
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Serial", request.Serial, DbType.String, ParameterDirection.Input);
         parameters.Add("Number", request.Number, DbType.String, ParameterDirection.Input);

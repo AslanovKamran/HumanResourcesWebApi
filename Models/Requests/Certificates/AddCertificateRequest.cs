@@ -5,8 +5,6 @@ namespace HumanResourcesWebApi.Models.Requests.Certificates;
 
 public class AddCertificateRequest
 {
-    [Key]
-    public int Id { get; set; }
 
     [Required]
     public int EmployeeId { get; set; }

@@ -20,7 +20,6 @@ public class BusinessTripsRepository(string connectionString) : IBusinessTripsRe
         {
 
             var parameters = new DynamicParameters();
-            parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("Purpose", request.Purpose, DbType.String, ParameterDirection.Input);
             parameters.Add("StartDate", request.StartDate, DbType.DateTime, ParameterDirection.Input);
             parameters.Add("EndDate", request.EndDate, DbType.DateTime, ParameterDirection.Input);

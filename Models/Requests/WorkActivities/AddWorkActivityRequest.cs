@@ -4,8 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.WorkActivities;
 
 public class AddWorkActivityRequest
 {
-    [Required]
-    public int Id { get; set; }
+   
 
     [Required]
     public int EmployeeId { get; set; }

@@ -4,9 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.Vacations;
 
 public class AddVacationRequest
 {
-    [Required]
-    public int Id { get; set; }
-
+    
     [Required]
     public int EmployeeId { get; set; }
 

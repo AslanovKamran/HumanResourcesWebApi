@@ -4,8 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.IdentityCards;
 
 public class AddIdentityCardRequest
 {
-    [Required]
-    public int Id { get; set; }
+  
 
     [Required(AllowEmptyStrings = false)]
     [StringLength(50, ErrorMessage = "Series cannot exceed 50 characters.")]

@@ -1,5 +1,5 @@
-﻿using HumanResourcesWebApi.Abstract;
-using HumanResourcesWebApi.Models.Requests.BusinessTrips;
+﻿using HumanResourcesWebApi.Models.Requests.BusinessTrips;
+using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -92,4 +92,7 @@ public class BusinessTripsController(IBusinessTripsRepository repos) : Controlle
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
         }
     }
+
+    //HttPut
+    //HttpDelete
 }

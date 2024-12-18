@@ -109,7 +109,7 @@ public class EmployeesRepository(string connectionString) : IEmployeesRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             var parameters = new DynamicParameters();
-            parameters.Add("Id", request.Id, DbType.Int32);
+           
             parameters.Add("Surname", request.Surname, DbType.String);
             parameters.Add("Name", request.Name, DbType.String);
             parameters.Add("FatherName", request.FatherName, DbType.String);

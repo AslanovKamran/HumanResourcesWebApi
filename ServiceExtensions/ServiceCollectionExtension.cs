@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomRepositories(this IServiceCollection services, string connectionString)
     {
         services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
+        services.AddScoped<IPreviousWorkingPlacesRepository, PreviousWorkingPlacesRepository>(provider => new PreviousWorkingPlacesRepository(connectionString));
         services.AddScoped<IGeneralInformationRepository, GeneralInformationRepository>(provider => new GeneralInformationRepository(connectionString));
         services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
         services.AddScoped<IIdentityCardsRepository, IdentityCardsRepository>(provider => new IdentityCardsRepository(connectionString));
@@ -17,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBusinessTripsRepository, BusinessTripsRepository>(provider => new BusinessTripsRepository(connectionString));
         services.AddScoped<ICertificatesRepository, CertificatesRepositoty>(provider => new CertificatesRepositoty(connectionString));
         services.AddScoped<IStateTablesRepository, StateTablesRepository>(provider => new StateTablesRepository(connectionString));
+        services.AddScoped<ISubstitutesRepository, SubstitutesRepository>(provider => new SubstitutesRepository(connectionString));
         services.AddScoped<IReprimandsRepository, ReprimandsRepository>(provider => new ReprimandsRepository(connectionString));
         services.AddScoped<IEmployeesRepository, EmployeesRepository>(provider => new EmployeesRepository(connectionString));
         services.AddScoped<IEducationRepository, EducationRepository>(provider => new EducationRepository(connectionString));
@@ -27,13 +29,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
         services.AddScoped<ICitiesRepository, CitiesRepository>(provider => new CitiesRepository(connectionString));
+
         services.AddScoped<IAnvizEmployeesRepository, AnvizEmployeesRepository>(provider => new AnvizEmployeesRepository(connectionString));
 
         services.AddScoped<ITabelVacationRepository, TabelVacationRepository>(provider => new TabelVacationRepository(connectionString));
         services.AddScoped<ITabelAbsentRepository, TabelAbsentRepository>(provider => new TabelAbsentRepository(connectionString));
         services.AddScoped<ITabelBulletinRepository, TabelBulletinRepository>(provider => new TabelBulletinRepository(connectionString));
         services.AddScoped<ITabelExtraWorkRepository, TabelExtraWorkRepository>(provider => new TabelExtraWorkRepository(connectionString));
-        services.AddScoped<ISubstitutesRepository, SubstitutesRepository>(provider => new SubstitutesRepository(connectionString));
 
         return services;
     }

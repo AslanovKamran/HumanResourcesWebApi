@@ -4,8 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.FamilyMembers;
 
 public class AddFamilyMemberRequest
 {
-    [Key] 
-    public int Id { get; set; }
+
 
     [Required]
     public int EmployeeId { get; set; }

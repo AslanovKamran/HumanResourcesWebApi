@@ -32,7 +32,7 @@ public class IdentityCardsRepository(string connectionString) : IIdentityCardsRe
     public async Task AddIdentityCardAsync(AddIdentityCardRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+       
         parameters.Add("Series", request.Series, DbType.String, ParameterDirection.Input);
         parameters.Add("CardNumber", request.CardNumber, DbType.String, ParameterDirection.Input);
         parameters.Add("Organization", request.Organization, DbType.String, ParameterDirection.Input);

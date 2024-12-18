@@ -31,7 +31,7 @@ public class VacationTypesRepository(string connectionString) : IVacationTypesRe
     public async Task AddVacationAsync(AddVacationTypeRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+
         parameters.Add("VacationPaymentTypeId", request.VacationPaymentTypeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);
 

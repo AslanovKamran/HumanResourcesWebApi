@@ -34,7 +34,7 @@ public class TabelExtraWorkRepository : ITabelExtraWorkRepository
     public async Task AddExtraWorkAsync(AddTabelExtraWorkRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+     
         parameters.Add("Date", request.Date, DbType.DateTime, ParameterDirection.Input);
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("ExtraWorkType", request.ExtraWorkType, DbType.Int32, ParameterDirection.Input);

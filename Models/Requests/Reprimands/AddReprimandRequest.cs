@@ -4,9 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.Reprimands;
 
 public class AddReprimandRequest
 {
-    [Required]
-    public int Id { get; set; }
-
+   
     [DataType(DataType.Date)]
     public DateTime IssuedAt { get; set; }
 

@@ -4,8 +4,6 @@ namespace HumanResourcesWebApi.Models.Requests.Awards;
 
 public class AddAwardRequest
 {
-    [Required]
-    public int Id { get; set; }
 
     [Required]
     public DateTime OrderDate { get; set; }

@@ -36,7 +36,7 @@ public class TabelAbsentRepository : ITabelAbsentRepository
     public async Task AddTabelAbsentAsync(AddTabelAbsentRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+       
         parameters.Add("Date", request.Date, DbType.DateTime, ParameterDirection.Input);
         parameters.Add("Cause", request.Cause, DbType.String, ParameterDirection.Input);
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);

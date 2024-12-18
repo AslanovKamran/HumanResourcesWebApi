@@ -33,7 +33,7 @@ public class PreviousNamesRepository(string connectionString) : IPreviousNamesRe
     public async Task AddPreviousNameAsync(AddPreviousNameRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+      
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Surname", request.Surname, DbType.String, ParameterDirection.Input);
         parameters.Add("Name", request.Name, DbType.String, ParameterDirection.Input);

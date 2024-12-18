@@ -31,7 +31,6 @@ public class AwardsRepository(string connectionString) : IAwardsRepository
     public async Task AddAwardAsync(AddAwardRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
         parameters.Add("OrderDate", request.OrderDate, DbType.DateTime, ParameterDirection.Input);
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("Note", request.Note, DbType.String, ParameterDirection.Input);

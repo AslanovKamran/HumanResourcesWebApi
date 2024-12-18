@@ -50,7 +50,7 @@ public class SubstitutesRepository : ISubstitutesRepository
     public async Task AddSubstituteAsync(AddSubstituteRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+     
         parameters.Add("WhoId", request.WhoId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("WhomId", request.WhomId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("TabelVacationId", request.TabelVacationId, DbType.Int32, ParameterDirection.Input);

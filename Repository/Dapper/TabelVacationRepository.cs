@@ -38,7 +38,7 @@ public class TabelVacationRepository : ITabelVacationRepository
     public async Task AddTabelVacationAsync(AddTabelVacationRequest request)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+
         parameters.Add("BeginDate", request.BeginDate, DbType.DateTime, ParameterDirection.Input);
         parameters.Add("EndDate", request.EndDate, DbType.DateTime, ParameterDirection.Input);
         parameters.Add("MainDay", request.MainDay, DbType.Int32, ParameterDirection.Input);

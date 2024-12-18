@@ -35,7 +35,7 @@ public class WorkActivitiesRepository(string connectionString) : IWorkActivities
         var query = "AddWorkActivity";
 
         var parameters = new DynamicParameters();
-        parameters.Add("Id", request.Id, DbType.Int32, ParameterDirection.Input);
+      
         parameters.Add("EmployeeId", request.EmployeeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("WorkActivityTypeId", request.WorkActivityTypeId, DbType.Int32, ParameterDirection.Input);
         parameters.Add("WorkActivityDate", request.WorkActivityDate, DbType.Date, ParameterDirection.Input);

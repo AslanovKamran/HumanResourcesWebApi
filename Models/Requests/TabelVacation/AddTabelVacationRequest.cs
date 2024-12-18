@@ -2,7 +2,6 @@
 
 public class AddTabelVacationRequest
 {
-    public int Id { get; set; }
     public DateTime BeginDate { get; set; }
     public DateTime EndDate { get; set; }
     public int? MainDay { get; set; }

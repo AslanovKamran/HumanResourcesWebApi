@@ -4,9 +4,7 @@ namespace HumanResourcesWebApi.Models.Requests.PreviousNames;
 
 public class AddPreviousNameRequest
 {
-    [Required]
-    public int Id { get; set; }
-
+   
     [Required]
     public int EmployeeId { get; set; }
 
