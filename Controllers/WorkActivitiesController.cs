@@ -66,7 +66,7 @@ public class WorkActivitiesController(IWorkActivitiesRepository repos) : Control
         try
         {
             await _repos.AddWorkActivityAsync(request);
-            return Ok(new { message = $"Work activity with Id {request.Id} added successfully!" });
+            return Ok(new { message = $"Work activity added successfully!" });
         }
         catch (SqlException ex)
         {

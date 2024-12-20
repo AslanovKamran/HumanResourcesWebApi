@@ -12,31 +12,68 @@ public class BusinessTripsRepository(string connectionString) : IBusinessTripsRe
 {
     private readonly string _connectionString = connectionString;
 
+    #region Add
+
     public async Task AddBusinessTripWithDetailsAsync(AddBusinessTripWithDetailsRequest request)
     {
         var uniqueEmployeeIds = string.Join(",", request.EmployeeIds.Split(',').Select(int.Parse).Distinct());
 
+        var parameters = new DynamicParameters();
+        parameters.Add("Purpose", request.Purpose, DbType.String, ParameterDirection.Input);
+        parameters.Add("StartDate", request.StartDate, DbType.DateTime, ParameterDirection.Input);
+        parameters.Add("EndDate", request.EndDate, DbType.DateTime, ParameterDirection.Input);
+        parameters.Add("EmployeeIds", uniqueEmployeeIds, DbType.String, ParameterDirection.Input);
+        parameters.Add("CityIds", request.CityIds, DbType.String, ParameterDirection.Input);
+        parameters.Add("DestinationPoints", request.DestinationPoints, DbType.String, ParameterDirection.Input);
+        parameters.Add("DocumentNumber", request.DocumentNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("DocumentDate", request.DocumentDate, DbType.Date, ParameterDirection.Input);
+        parameters.Add("TripCardGivenAt", request.TripCardGivenAt, DbType.Date, ParameterDirection.Input);
+        parameters.Add("TripCardNumber", request.TripCardNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("OrganizationInCharge", request.OrganizationInCharge, DbType.String, ParameterDirection.Input);
+        parameters.Add("Note", request.Note, DbType.String, ParameterDirection.Input);
+
         using (var connection = new SqlConnection(_connectionString))
         {
-
-            var parameters = new DynamicParameters();
-            parameters.Add("Purpose", request.Purpose, DbType.String, ParameterDirection.Input);
-            parameters.Add("StartDate", request.StartDate, DbType.DateTime, ParameterDirection.Input);
-            parameters.Add("EndDate", request.EndDate, DbType.DateTime, ParameterDirection.Input);
-            parameters.Add("EmployeeIds", uniqueEmployeeIds, DbType.String, ParameterDirection.Input);
-            parameters.Add("CityIds", request.CityIds, DbType.String, ParameterDirection.Input);
-            parameters.Add("DestinationPoints", request.DestinationPoints, DbType.String, ParameterDirection.Input);
-            parameters.Add("DocumentNumber", request.DocumentNumber, DbType.String, ParameterDirection.Input);
-            parameters.Add("DocumentDate", request.DocumentDate, DbType.Date, ParameterDirection.Input);
-            parameters.Add("TripCardGivenAt", request.TripCardGivenAt, DbType.Date, ParameterDirection.Input);
-            parameters.Add("TripCardNumber", request.TripCardNumber, DbType.String, ParameterDirection.Input);
-            parameters.Add("OrganizationInCharge", request.OrganizationInCharge, DbType.String, ParameterDirection.Input);
-            parameters.Add("Note", request.Note, DbType.String, ParameterDirection.Input);
-
             await connection.ExecuteAsync("AddBusinessTripWithDetails", parameters, commandType: CommandType.StoredProcedure);
 
         }
     }
+
+    public async Task AddEmployeeToBusinessTripAsync(int tripId, int employeeId)
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("TripId", tripId, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("EmployeeId", employeeId, DbType.Int32, ParameterDirection.Input);
+
+        var query = @"InsertTripEmployee";
+
+        using (var db = new SqlConnection(_connectionString)) 
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    public async Task AddDestinationPointToBusinessTripAsync(int tripId, int cityId, string destinationPoint) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("TripId", tripId, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("CityId", cityId, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("DestinationPoint", destinationPoint, DbType.String, ParameterDirection.Input);
+
+        var query = @"InsertTripCity";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+
+    }
+
+    #endregion
+
+    #region Get
 
     public async Task<BusinessTripDetailsDTO> GetBusinessTripDetailsAsync(int tripId)
     {
@@ -75,7 +112,7 @@ public class BusinessTripsRepository(string connectionString) : IBusinessTripsRe
         int skip = (currentPage - 1) * itemsPerPage;
         int take = itemsPerPage;
 
-        
+
 
         var parameters = new DynamicParameters();
 
@@ -94,4 +131,83 @@ public class BusinessTripsRepository(string connectionString) : IBusinessTripsRe
 
         }
     }
+
+    #endregion
+
+    #region Update
+
+    public async Task UpdateDestinationPointOfBusinessTripAsync(int entryId, int cityId, string destinationPoint) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Id", entryId, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("CityId", cityId, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("DestinationPoint", destinationPoint, DbType.String, ParameterDirection.Input);
+
+        var query = @"UpdateTripCity";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+
+    public async Task UpdateBusinessTripAsync(UpdateBusinessTripRequest request) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Id", request.Id, DbType.String, ParameterDirection.Input);
+        parameters.Add("Purpose", request.Purpose, DbType.String, ParameterDirection.Input);
+        parameters.Add("StartDate", request.StartDate, DbType.DateTime, ParameterDirection.Input);
+        parameters.Add("EndDate", request.EndDate, DbType.DateTime, ParameterDirection.Input);
+        parameters.Add("DocumentNumber", request.DocumentNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("DocumentDate", request.DocumentDate, DbType.Date, ParameterDirection.Input);
+        parameters.Add("TripCardGivenAt", request.TripCardGivenAt, DbType.Date, ParameterDirection.Input);
+        parameters.Add("TripCardNumber", request.TripCardNumber, DbType.String, ParameterDirection.Input);
+        parameters.Add("OrganizationInCharge", request.OrganizationInCharge, DbType.String, ParameterDirection.Input);
+        parameters.Add("Note", request.Note, DbType.String, ParameterDirection.Input);
+
+        var query = @"UpdateBusinessTrip";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    #endregion
+
+    #region Delete
+
+    public async Task RemoveEmployeeFromBusinessTripAsync(int entryId) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Id", entryId, DbType.Int32, ParameterDirection.Input);
+
+        var query = @"DeleteTripEmployee";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    public async Task RemoveDestinationPointFromBusinessTripAsync(int entryId) 
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Id", entryId, DbType.Int32, ParameterDirection.Input);
+
+        var query = @"DeleteTripCity";
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
+        }
+    }
+
+    #endregion
+
 }

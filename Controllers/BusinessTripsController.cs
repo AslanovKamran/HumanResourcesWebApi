@@ -2,6 +2,7 @@
 using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Azure.Core;
 
 namespace HumanResourcesWebApi.Controllers;
 
@@ -11,6 +12,7 @@ public class BusinessTripsController(IBusinessTripsRepository repos) : Controlle
 {
     private readonly IBusinessTripsRepository _repos = repos;
 
+    #region Get
     [HttpGet("{tripId}")]
     public async Task<IActionResult> GetBusinessTripDetails(int tripId)
     {
@@ -64,6 +66,10 @@ public class BusinessTripsController(IBusinessTripsRepository repos) : Controlle
         }
     }
 
+    #endregion
+
+    #region Add
+
 
     [HttpPost]
     public async Task<IActionResult> AddBusinessTrip([FromForm] AddBusinessTripWithDetailsRequest request)
@@ -93,6 +99,143 @@ public class BusinessTripsController(IBusinessTripsRepository repos) : Controlle
         }
     }
 
-    //HttPut
-    //HttpDelete
+    [HttpPost]
+    [Route("employee")]
+    public async Task<IActionResult> AddEmployeeToBusinessTrip(int tripId, int employeeId)
+    {
+        try
+        {
+            await _repos.AddEmployeeToBusinessTripAsync(tripId, employeeId);
+            return Ok(new { message = "Employee has been successfully added to the trip." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+    }
+
+
+    [HttpPost]
+    [Route("destination")]
+    public async Task<IActionResult> AddDestinationPointToBusinessTrip(int tripId, int cityId, string destinationPoint)
+    {
+        try
+        {
+            await _repos.AddDestinationPointToBusinessTripAsync(tripId, cityId, destinationPoint);
+            return Ok(new { message = "Destination has been successfully added to the trip." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+    }
+
+
+    #endregion
+
+    #region Delete
+
+    #endregion
+
+    [HttpDelete("employee/{id}")]
+    public async Task<IActionResult> RemoveEmployeeFromBusinessTrip(int id) 
+    {
+        try
+        {
+            await _repos.RemoveEmployeeFromBusinessTripAsync(id);
+            return Ok(new { message = "Employee has been successfully deleted from the trip." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+    }
+
+    [HttpDelete("destination/{id}")]
+    public async Task<IActionResult> RemoveDestinationFromBusinessTrip(int id)
+    {
+        try
+        {
+            await _repos.RemoveDestinationPointFromBusinessTripAsync(id);
+            return Ok(new { message = "Destination Point has been successfully deleted from the trip." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+    }
+
+    #region Update
+
+    [HttpPut]
+    
+    public async Task<IActionResult> UpdateBusinessTrip(UpdateBusinessTripRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new
+            {
+                message = "Validation failed",
+                errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+            });
+        }
+     
+        try
+        {
+            await _repos.UpdateBusinessTripAsync(request);
+            return Ok(new { message = "Trip has been successfully updated" });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+
+    }
+
+    [HttpPut]
+    [Route("destination")]
+    public async Task<IActionResult> UpdateDestinationPointOfBusinessTrip(int entryId, int cityId, string destinationPoint)
+    {
+        try
+        {
+            await _repos.UpdateDestinationPointOfBusinessTripAsync(entryId,cityId,destinationPoint);
+            return Ok(new { message = "Destination Point has been successfully updated for the trip." });
+        }
+
+        catch (SqlException ex)
+        {
+            return Conflict(new { message = "Database conflict occurred", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred", details = ex.Message });
+        }
+
+    }
+    #endregion
 }
