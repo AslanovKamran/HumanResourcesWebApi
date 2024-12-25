@@ -10,6 +10,25 @@ namespace HumanResourcesWebApi.Models.DTO.EmoloyeeDTO
         public string Name { get; set; } = string.Empty;     // Not nullable, assuming it's required
         public string FatherName { get; set; } = string.Empty;// Not nullable, assuming it's required
         public DateTime? BirthDate { get; set; } // Nullable as BirthDate can be null
+
+        public int? Age
+        {
+            get
+            {
+                if (BirthDate == null)
+                    return null; // Return null if BirthDate is not provided
+
+                var today = DateTime.Today;
+                var age = today.Year - BirthDate.Value.Year;
+
+                // Adjust for cases where the birthday hasn't occurred this year
+                if (BirthDate.Value.Date > today.AddYears(-age))
+                    age--;
+
+                return age;
+            }
+        }
+
         public string GenderType { get; set; } = string.Empty;// Not nullable
         public string MaritalStatus { get; set; } = string.Empty; // Not nullable
         public string? SocialInsuranceNumber { get; set; } // Nullable
