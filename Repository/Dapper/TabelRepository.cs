@@ -25,9 +25,7 @@ public class TabelRepository : ITabelRepository
 
         using (var db = new SqlConnection(_connectionString))
         {
-
-            //var result = await db.QueryAsync<TabelModel>(query, parameters, commandType: CommandType.StoredProcedure);
-            //return result.ToList();
+      
             var result = await db.QueryAsync(query, parameters, commandType: CommandType.StoredProcedure);
 
             var tabel = result.Select(row => new TabelModel

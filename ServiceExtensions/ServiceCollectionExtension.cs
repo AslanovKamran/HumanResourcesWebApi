@@ -1,5 +1,6 @@
 ﻿using HumanResourcesWebApi.Repository.Dapper;
 using HumanResourcesWebApi.Abstract;
+using HumanResourcesWebApi.Tokens;
 
 namespace HumanResourcesWebApi.ServiceExtensions;
 
@@ -7,6 +8,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCustomRepositories(this IServiceCollection services, string connectionString)
     {
+
+        services.AddSingleton<ITokenGenerator, TokenGenerator>();
+
         services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
         services.AddScoped<IPreviousWorkingPlacesRepository, PreviousWorkingPlacesRepository>(provider => new PreviousWorkingPlacesRepository(connectionString));
         services.AddScoped<IGeneralInformationRepository, GeneralInformationRepository>(provider => new GeneralInformationRepository(connectionString));
@@ -28,7 +32,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IHolidaysRepository, HolidaysRepository>(provider => new HolidaysRepository(connectionString));
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
+        services.AddScoped<IRightsRepository, RightsRepository>(provider => new RightsRepository(connectionString));
         services.AddScoped<ICitiesRepository, CitiesRepository>(provider => new CitiesRepository(connectionString));
+        services.AddScoped<IRolesRepository, RolesRepository>(provider => new RolesRepository(connectionString));
+        services.AddScoped<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
 
         services.AddScoped<ITabelRepository, TabelRepository>(provider => new TabelRepository(connectionString));
 
@@ -38,6 +45,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITabelAbsentRepository, TabelAbsentRepository>(provider => new TabelAbsentRepository(connectionString));
         services.AddScoped<ITabelBulletinRepository, TabelBulletinRepository>(provider => new TabelBulletinRepository(connectionString));
         services.AddScoped<ITabelExtraWorkRepository, TabelExtraWorkRepository>(provider => new TabelExtraWorkRepository(connectionString));
+
+
 
         return services;
     }

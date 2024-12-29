@@ -1,5 +1,5 @@
 ﻿using HumanResourcesWebApi.Abstract;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -13,11 +13,12 @@ public class TabelController : ControllerBase
     public TabelController(ITabelRepository repos) => _repos = repos;
 
     [HttpGet]
-    public async Task<IActionResult> GetTabel(int year, int month, int? organizationStructureId) 
+    [Authorize(Roles = "admin, tabel")]
+    public async Task<IActionResult> GetTabel(int year, int month, int? organizationStructureId)
     {
         try
         {
-            var result = await _repos.GetTabelDataAsync(year, month, organizationStructureId);  
+            var result = await _repos.GetTabelDataAsync(year, month, organizationStructureId);
             return Ok(result);
 
         }
