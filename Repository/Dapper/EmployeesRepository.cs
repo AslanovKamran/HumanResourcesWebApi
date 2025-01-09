@@ -55,6 +55,33 @@ public class EmployeesRepository(string connectionString) : IEmployeesRepository
             }
         }
     }
+
+    public async Task<(PageInfo PageInfo, List<EmployeeGeneralInfoDto>)> GetEmployeesGenerealInfo(int itemsPerPage = 10, int currentPage = 1) 
+    {
+        int skip = (currentPage - 1) * itemsPerPage;
+        int take = itemsPerPage;
+
+        using (var db = new SqlConnection(_connectionString)) 
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Skip", skip, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("Take", take, DbType.Int32, ParameterDirection.Input);
+
+            using (var multi = await db.QueryMultipleAsync("GetEmployeesGeneralInfo", parameters, commandType: CommandType.StoredProcedure))
+            {
+                int totalCount = multi.Read<int>().Single();
+                var employees = multi.Read<EmployeeGeneralInfoDto>().AsList();
+                var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
+
+                return (pageInfo, employees);
+            }
+        }
+
+    }
+
+
+
+
     public async Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id)
     {
         var parameters = new DynamicParameters();

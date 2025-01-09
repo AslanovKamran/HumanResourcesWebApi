@@ -52,6 +52,37 @@ public class EmployeesController(IEmployeesRepository repos) : ControllerBase
     }
 
     /// <summary>
+    /// Get the list of Employees General Information
+    /// </summary>
+    /// <param name="itemsPerPage"></param>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
+    [HttpGet("generalInfo")]
+    public async Task<IActionResult> GetEmployeesGeneralInfo([FromQuery] int itemsPerPage = 10, [FromQuery] int currentPage = 1)
+    {
+        try
+        {
+            var result = await _repos.GetEmployeesGenerealInfo(itemsPerPage, currentPage);
+            return Ok(new
+            {
+                Data = result.Item2,
+                PageInfo = result.PageInfo
+            });
+        }
+        catch (SqlException ex)
+        {
+            // Handle database-related exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "A database error occurred.", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
+        }
+    }
+
+
+    /// <summary>
     /// Retrieves general information about a specific employee by their ID.
     /// </summary>
     /// <param name="id">The ID of the employee whose information is being retrieved.</param>

@@ -11,6 +11,7 @@ public interface IEmployeesRepository
     #region Get
 
     Task<(PageInfo PageInfo, List<EmployeesChunk> Employees)> GetEmployeesChunkAsync(EmployeeFilter filter, int itemsPerPage = 10, int currentPage = 1);
+    Task<(PageInfo PageInfo, List<EmployeeGeneralInfoDto>)> GetEmployeesGenerealInfo(int itemsPerPage = 10, int currentPage = 1);
     Task<EmployeeGeneralInfoDto> GetEmployeeGeneralInfoAsync(int id);
     Task<EmployeeParty> GetPoliticalPartyAsync(int id);
     Task<EmployeeMilitaryInfo> GetEmployeeMilitaryInfoAsync(int id);
@@ -35,7 +36,7 @@ public interface IEmployeesRepository
     #region Delete
 
     Task DeleteEmployeeAsync(int id);
-    
+
     #endregion
 
 }
