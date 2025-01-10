@@ -14,6 +14,36 @@ public class FamilyMembersController(IFamilyMembersRepository repos) : Controlle
     #region Get
 
     /// <summary>
+    /// Get All Family Members 
+    /// </summary>
+    /// <param name="itemsPerPage"></param>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<IActionResult> GetAllFamilyMembers([FromQuery] int itemsPerPage = 10, [FromQuery] int currentPage = 1) 
+    {
+        try
+        {
+            var result = await _repos.GetAllFamilyMembers(itemsPerPage, currentPage);
+            return Ok(new
+            {
+                Data = result.FamilyMembers,
+                PageInfo = result.PageInfo
+            });
+        }
+        catch (SqlException ex)
+        {
+            // Handle database-related exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "A database error occurred.", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Retrieves a list of family members for a specific employee by their ID.
     /// </summary>
     /// <param name="employeeId">The ID of the employee whose family members are being retrieved.</param>
@@ -35,6 +65,8 @@ public class FamilyMembersController(IFamilyMembersRepository repos) : Controlle
             return StatusCode(500, new { message = "An error occurred", details = ex.Message });
         }
     }
+
+
 
     #endregion
 

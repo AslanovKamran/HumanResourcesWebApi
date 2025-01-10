@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
 using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
+using HumanResourcesWebApi.Models.Domain;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -12,6 +13,32 @@ public class FamilyMembersRepository(string connectionString) : IFamilyMembersRe
     private readonly string _connectionString = connectionString;
 
     #region Get
+
+    public async Task<(PageInfo PageInfo, List<EmployeeFamilyMember> FamilyMembers)> GetAllFamilyMembers(int itemsPerPage = 10, int currentPage = 1)
+    {
+        int skip = (currentPage - 1) * itemsPerPage;
+        int take = itemsPerPage;
+
+        var parameters = new DynamicParameters();
+
+        parameters.Add("Skip", skip, DbType.Int32, ParameterDirection.Input);
+        parameters.Add("Take", take, DbType.Int32, ParameterDirection.Input);
+
+        var query = @"GetAllFamilyMembers";
+
+        using (var db = new SqlConnection(_connectionString)) 
+        {
+            using (var multi = await db.QueryMultipleAsync(query, parameters, commandType: CommandType.StoredProcedure)) 
+            {
+                int totalCount = multi.Read<int>().Single();
+                var familyMembers = multi.Read<EmployeeFamilyMember>().AsList();
+                var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
+
+                return (PageInfo:pageInfo, FamilyMembers: familyMembers);
+            }
+        }
+    }
+
     public async Task<List<EmployeeFamilyMember>> GetFamilyMembersAsync(int employeeId)
     {
         var parameters = new DynamicParameters();
@@ -83,6 +110,8 @@ public class FamilyMembersRepository(string connectionString) : IFamilyMembersRe
             await db.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
+
+  
 
     #endregion
 
