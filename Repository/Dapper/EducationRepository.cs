@@ -1,9 +1,10 @@
 ﻿using HumanResourcesWebApi.Models.Requests.Educations;
+using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
+using HumanResourcesWebApi.Models.Domain;
 using HumanResourcesWebApi.Abstract;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using HumanResourcesWebApi.Models.DTO.EmoloyeeDTO;
 
 namespace HumanResourcesWebApi.Repository.Dapper;
 
@@ -25,6 +26,32 @@ public class EducationRepository(string connectionString) : IEducationRepository
             return result.AsList();
         }
     }
+
+    public async Task<(PageInfo PageInfo, List<EmployeeEducation> Educations) > GetAllEmployeeEducationAsync(int itemsPerPage = 10, int currentPage = 1)
+    {
+        int skip = (currentPage - 1) * itemsPerPage;
+        int take = itemsPerPage;
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Skip", skip, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("Take", take, DbType.Int32, ParameterDirection.Input);
+
+            var query = "GetAllEmployeesEducations";
+
+            using (var multi = await db.QueryMultipleAsync(query, parameters, commandType: CommandType.StoredProcedure))
+            {
+                int totalCount = multi.Read<int>().Single();
+                var educations = multi.Read<EmployeeEducation>().AsList();
+                var pageInfo = new PageInfo(totalCount, itemsPerPage, currentPage);
+
+                return (PageInfo: pageInfo, Educations: educations);
+            }
+        }
+    }
+
     #endregion
 
     #region Add

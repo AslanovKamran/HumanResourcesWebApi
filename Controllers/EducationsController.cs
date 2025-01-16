@@ -14,11 +14,42 @@ public class EducationsController(IEducationRepository repos) : ControllerBase
     #region Get
 
     /// <summary>
+    /// Get all employees education
+    /// </summary>
+    /// <param name="itemsPerPage"></param>
+    /// <param name="currentPage"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<IActionResult> GetAllEmployeeEducation([FromQuery] int itemsPerPage = 10, [FromQuery] int currentPage = 1)
+    {
+        try
+        {
+            var result = await _repos.GetAllEmployeeEducationAsync(itemsPerPage, currentPage);
+            return Ok(new
+            {
+                Data = result.Educations,
+                PageInfo = result.PageInfo
+            });
+        }
+        catch (SqlException ex)
+        {
+            // Handle database-related exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "A database error occurred.", details = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred.", details = ex.Message });
+        }
+    }
+
+
+    /// <summary>
     /// Retrieves a list of education records for a specific employee by their ID.
     /// </summary>
     /// <param name="employeeId">The ID of the employee whose education records are being retrieved.</param>
     /// <returns>A list of education records associated with the specified employee, or an error if no records are found or a conflict occurs.</returns>
-    
+
     [HttpGet("{employeeId}")]
     public async Task<IActionResult> GetEmployeeEducation(int employeeId)
     {
