@@ -115,6 +115,8 @@ builder.Services.AddCustomRepositories(connectionString!);
 
 var app = builder.Build();
 
+app.UseRouting(); 
+
 app.UseSwagger();
 
 app.UseSwaggerUI(c =>

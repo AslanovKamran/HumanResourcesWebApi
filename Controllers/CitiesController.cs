@@ -2,6 +2,7 @@
 using HumanResourcesWebApi.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HumanResourcesWebApi.Controllers;
 

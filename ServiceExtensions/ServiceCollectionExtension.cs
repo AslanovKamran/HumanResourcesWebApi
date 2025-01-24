@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICountriesRepository, CountriesRepository>(provider => new CountriesRepository(connectionString));
         services.AddScoped<IWorkNormsRepository, WorkNormsRepository>(provider => new WorkNormsRepository(connectionString));
         services.AddScoped<IHolidaysRepository, HolidaysRepository>(provider => new HolidaysRepository(connectionString));
+        services.AddScoped<IBrigadesRepository, BrigadesRepository>(provider => new BrigadesRepository(connectionString));
         services.AddScoped<IAwardsRepository, AwardsRepository>(provider => new AwardsRepository(connectionString));
         services.AddScoped<IMedalsRepository, MedalsRepository>(provider => new MedalsRepository(connectionString));
         services.AddScoped<IRightsRepository, RightsRepository>(provider => new RightsRepository(connectionString));
