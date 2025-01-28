@@ -10,7 +10,7 @@ namespace HumanResourcesWebApi.Common.Mapper
             var result = new StateTableInfoDTO();
 
             result.Id = obj.Id;
-            result.OrganizatinStructureFullName = obj.OrganizationStructure.FullName;
+            result.OrganizationStructureFullName = obj.OrganizationStructure.FullName;
             result.Name = obj.Name;
             result.Degree = obj.Degree;
             result.UnitCount = obj.UnitCount;

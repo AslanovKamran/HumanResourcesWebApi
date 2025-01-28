@@ -3,7 +3,7 @@
     public class StateTableInfoDTO
     {
         public int Id { get; set; }
-        public string OrganizatinStructureFullName { get; set; } = string.Empty;
+        public string OrganizationStructureFullName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public int? Degree { get; set; }
         public int UnitCount { get; set; }
