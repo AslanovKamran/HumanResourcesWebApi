@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IOrganizationStructuresRepository, OrganizationStructuresRepository>(provider => new OrganizationStructuresRepository(connectionString));
         services.AddScoped<IPreviousWorkingPlacesRepository, PreviousWorkingPlacesRepository>(provider => new PreviousWorkingPlacesRepository(connectionString));
+        services.AddScoped<IBrigadeReplacementsRepository, BrigadeReplacementsRepository>(provider => new BrigadeReplacementsRepository(connectionString));
         services.AddScoped<IGeneralInformationRepository, GeneralInformationRepository>(provider => new GeneralInformationRepository(connectionString));
         services.AddScoped<IWorkActivitiesRepository, WorkActivitiesRepository>(provider => new WorkActivitiesRepository(connectionString));
         services.AddScoped<IIdentityCardsRepository, IdentityCardsRepository>(provider => new IdentityCardsRepository(connectionString));
